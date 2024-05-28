@@ -1,60 +1,3 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import mongooseConnect from './mongooseConnect.js';
-import Users from './model/Users.js';
-
-const app = express();
-mongoose.connect(mongooseConnect);
-app.use(express.json());
-
-// const fetchUsers = async () => {
-//   const alldata = [];
-//   const apiKey = 'RGAPI-75c2a006-b793-491b-a812-a58c8a6564e9';
-//   const queue = 'RANKED_SOLO_5x5';
-//   const tier = 'SILVER';
-//   const division = 'III';
-//   const maxPage = 20
-//   setTimeout(() => {
-    
-//   }, 1000)
-//   for (let i = 1; i <= maxPage; i++) {
-//     const response = await fetch(`https://eun1.api.riotgames.com/lol/league/v4/entries/${queue}/${tier}/${division}?page=${i}&api_key=${apiKey}`);
-//     const data = await response.json();
-//     let j = 0
-//     for (const user of data) {
-      
-//       j++;
-//       const leagueId = user.leagueId
-//       const queueType = user.queueType
-//       const tier = user.tier
-//       const rank = user.rank
-//       const summonerId = user.summonerId
-//       const leaguePoints = user.leaguePoints
-//       const wins = user.wins
-//       const losses = user.losses
-//       const newUser = new Users({
-//         leagueId,
-//         queueType,
-//         tier,
-//         rank,
-//         summonerId,
-//         leaguePoints,
-//         wins,
-//         losses
-//       });
-//       newUser.save()
-//       .then((user) => console.log("suxeszfűl ", user))
-//       .catch(error => console.log("erór"))
-//     }
-//     // alldata.push(...data);
-//   }
-  
-//   //🦥kiscica🐈🐈‍⬛\\
-//   console.log('mögvan')
-// };
-
-// fetchUsers();
-
 const fetchUsers = async () => {
   const starterPage = 1
   const maxPage = 1;
@@ -113,9 +56,3 @@ const fetchUsers = async () => {
 };
 
 fetchUsers();
-
-app.get('/api/stats', (req, res) => {
-  res.status(200).json({ message: 'ok' });
-});
-
-app.listen(3000, () => console.log('http://localhost:3000'));
