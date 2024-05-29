@@ -86,6 +86,7 @@ app.post('/api/userFromRiot', async (req, res) => {
         }
 
         matches.push({
+          matchId: jsonMatch.metadata.matchId,
           gameDuration: jsonMatch.info.gameDuration,
           gameCreation: jsonMatch.info.gameCreation,
           gameMode: jsonMatch.info.gameMode,

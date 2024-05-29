@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-const SearchBar = () => {
+const SearchBar = ({searchedUser, setSearchedUser}) => {
   const [firstSubmit, setFirstSubmit] = useState(false);
-  const [searchedUser, setSearchedUser] = useState(null);
   const [submitted, setSubmitted] = useState(false);
   const [name, setName] = useState('');
   const [tagLine, setTagLine] = useState('eune');
@@ -50,7 +49,7 @@ const SearchBar = () => {
     <div className='searchContainer'>
     <img src="banner.png" className="banner" alt="" />
     <form onSubmit={handleSubmit}>
-      <select onChange={(e) => setRegion(e.target.value)}>
+      <select className='.cl' onChange={(e) => setRegion(e.target.value)}>
         <option value="europe">EUROPE</option>
         <option value="americas">AMERICAS</option>
         <option value="asia">ASIA</option>

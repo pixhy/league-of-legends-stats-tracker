@@ -48,7 +48,7 @@ ranked playerbase: 501 073
 
 DAY 3:
 
-neccessary match data :
+gather neccessary match data :
 
 info.gameDuration
 info.gameCreation
