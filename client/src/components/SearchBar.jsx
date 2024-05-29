@@ -47,8 +47,8 @@ const SearchBar = () => {
   }
 
   return (
-    <>
-    <img src="banner.png" alt="" />
+    <div className='searchContainer'>
+    <img src="banner.png" className="banner" alt="" />
     <form onSubmit={handleSubmit}>
       <select onChange={(e) => setRegion(e.target.value)}>
         <option value="europe">EUROPE</option>
@@ -57,11 +57,11 @@ const SearchBar = () => {
       </select>
       <label htmlFor="name">Name</label>
       <input type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)}/>
-      <label htmlFor="tagLine">Tag</label>
+      <label htmlFor="tagLine">{" "}#</label>
       <input type="text" name="tagLine" id="tagLine" placeholder='e.g.:EUNE' value={tagLine} onChange={(e)=> setTagLine(e.target.value.toLowerCase())}/>
       <button type='submit'>Submit</button>
     </form>
-    </>
+    </div>
   )
 }
 

@@ -1,10 +1,11 @@
-Day1: 
+DAY 1:
 
 Figma: https://www.figma.com/board/yL4VuDH0xiv2H8WgDcI0re/lol-site?node-id=0-1&t=8oKvD91fzMtGhp3d-1
 Github project: https://github.com/orgs/CodecoolGlobal/projects/119/
 
-Day2: 
-Building database - fetching playerbase by rank: 
+DAY 2: 
+
+Building database - fetching playerbase by rank (will take approx. 7 days): 
 20 fetch / 1 sec
 Iron 4: 16 page
 Iron 3: 37 page
@@ -43,3 +44,77 @@ Dia 1: 10 page
 
 total page sum 2268
 ranked playerbase: 501 073
+
+
+DAY 3:
+
+neccessary match data :
+
+info.gameDuration
+info.gameCreation
+info.gameMode
+
+info.participants[
+  {
+    championName
+    individualPosition
+    item0
+    item1
+    item2
+    item3
+    item4
+    item5
+    item6
+    kills
+    assists
+    deaths
+    summonerLevel
+    riotIdGameName
+    riotIdTagline
+    visionScore
+    damageDealtToBuildings
+    damageDealtToObjectives
+    damageDealtToTurrets
+    damageSelfMitigated
+
+    goldEarned
+
+    magicDamageDealt
+    magicDamageDealtToChampions
+    magicDamageTaken
+
+    physicalDamageDealt
+    physicalDamageDealtToChampions
+    physicalDamageTaken
+
+    profileIcon
+
+    totalDamageDealt
+    totalDamageDealtToChampions
+    totalDamageShieldedOnTeammates
+    totalDamageTaken
+
+    Summoner spells:
+    summoner1Id
+    summoner2Id
+
+    100 or 200 (100 = blue side, 200 = red side)
+    teamId
+
+    champLevel
+    championId
+    championName
+
+    win
+  }
+]
+
+teams[
+  baron.kills
+  champion.kills
+  dragon.kills
+  horde.kills
+  inhibitor.kills
+  riftHerald.kills
+  win
+]
