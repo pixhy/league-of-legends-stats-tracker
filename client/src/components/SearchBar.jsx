@@ -47,6 +47,8 @@ const SearchBar = () => {
   }
 
   return (
+    <>
+    <img src="banner.png" alt="" />
     <form onSubmit={handleSubmit}>
       <select onChange={(e) => setRegion(e.target.value)}>
         <option value="europe">EUROPE</option>
@@ -59,6 +61,7 @@ const SearchBar = () => {
       <input type="text" name="tagLine" id="tagLine" placeholder='e.g.:EUNE' value={tagLine} onChange={(e)=> setTagLine(e.target.value.toLowerCase())}/>
       <button type='submit'>Submit</button>
     </form>
+    </>
   )
 }
 
