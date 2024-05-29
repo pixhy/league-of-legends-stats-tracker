@@ -36,10 +36,10 @@ Emerald 3: 70 page
 Emerald 2: 52 page
 Emerald 1: 30 page
 
-Dia 4: 49 sup diff
-Dia 3: 31 adc diff
-Dia 2: 21 top diff
-Dia 1: 10 jg diff
+Dia 4: 49 page
+Dia 3: 31 page
+Dia 2: 21 page
+Dia 1: 10 page
 
 total page sum 2268
-playerbase: xx 
+ranked playerbase: 501 073

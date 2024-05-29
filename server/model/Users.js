@@ -9,7 +9,12 @@ const UserSchema =  new Schema({
   summonerId: String,
   leaguePoints: Number,
   wins: Number,
-  losses: Number
+  losses: Number,
+  puuid: String,
+  accountId: String,
+  profileIconId: Number,
+  summonerLevel: Number,
+  revisionDate: Number
 });
 
 export default model('Users', UserSchema);
