@@ -1,11 +1,12 @@
 const User = ({ profile }) => {
   const user = profile.profileData;
-  const rank = profile.rankedDataAll[0];
+  const rank = profile.rankedDataAll[0].tier ? profile.rankedDataAll[0] : profile.rankedDataAll[1];
   if (profile.message) {
     return <div className="profileError">{profile.message}</div>;
   }
 
-  console.log(profile.rankedDataAll[0]);
+  console.log("profile.rankedDataAll[0]: ",profile.rankedDataAll[0]);
+  console.log("user: ", user)
 
   return (
     <div className="userData">
