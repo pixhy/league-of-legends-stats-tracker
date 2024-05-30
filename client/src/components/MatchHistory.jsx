@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Match from './Match';
 
-const MatchHistory = ({ matchHistory }) => {
+const MatchHistory = ({ matchHistory, states , setSearchedUser}) => {
   console.log('matchHistory', matchHistory);
   // const [matchData, setMatchData] = useEffect(null)
   useEffect(() => {
@@ -9,18 +9,19 @@ const MatchHistory = ({ matchHistory }) => {
     // setMatchData(matchHistory)
   }, [matchHistory]);
 
+  console.log("matches: ",matchHistory.matches)
   return (
     <>
-      {matchHistory ? (
+      {matchHistory.matches.length > 0 ? (
         <>
           <div>
-            {matchHistory.map((history, i) => (
-              <Match history={history} key={i}/>
+            {matchHistory.matches.map((match, i) => (
+              <Match match={match} key={i} states={states} setSearchedUser={setSearchedUser}/>
             ))}
           </div>
         </>
       ) : (
-        <div></div>
+        <div className='emptyHistory'>There are no results recorded.</div>
       )}
     </>
   );

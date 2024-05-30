@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
-const SearchBar = ({searchedUser, setSearchedUser}) => {
+const SearchBar = ({searchedUser, setSearchedUser, states, setError}) => {
+
+  // let message = useRef(null)
   const [firstSubmit, setFirstSubmit] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState('');
-  const [tagLine, setTagLine] = useState('eune');
-  const [region, setRegion] = useState('europe');
+  
   useEffect(() => {
     if(!firstSubmit) return;
+    console.log("name",states.name)
+    console.log("tagLine",states.tagLine)
+    console.log("region",states.region)
 
     const fetchUser = async () => {
       try {
@@ -16,11 +18,18 @@ const SearchBar = ({searchedUser, setSearchedUser}) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({region: region, name: name, tagLine: tagLine})
+          body: JSON.stringify({region: states.region, name: states.name, tagLine: states.tagLine})
         });
-
         const user = await response.json();
-        setSearchedUser(user);
+        if (response.status === 404) {
+          console.log("404error")
+          setError(true)
+        } else if (response.status === 200){
+          setError(false)
+          setSearchedUser(user);
+        } else if (response.status === 500){
+          console.log("500error")
+        }
         console.log('searchedUser', searchedUser,"object:" ,user.puuid);
         // setSubmitted(false)
       } catch (error) {
@@ -29,7 +38,7 @@ const SearchBar = ({searchedUser, setSearchedUser}) => {
     };
     fetchUser();
 
-  }, [submitted, firstSubmit]);
+  }, [states.submitted, firstSubmit]);
 
   useEffect(() => {
     if (!firstSubmit) return
@@ -40,8 +49,23 @@ const SearchBar = ({searchedUser, setSearchedUser}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("form", e.target[1].value)
     setFirstSubmit(true);
-    setSubmitted(prev => !prev)
+    states.setSubmitted(prev => !prev)
+    separateUserNameAndTag(e.target[1].value)
+  }
+
+  function separateUserNameAndTag(name){
+
+    if(name.includes("#")){
+    let gameName = name.split("#")[0]
+    let tagLine = name.split("#")[1].toLowerCase()
+    states.setName(gameName)
+    states.setTagLine(tagLine)
+    
+    } else{
+      console.log("Enter correct username!")
+    }
 
   }
 
@@ -49,15 +73,11 @@ const SearchBar = ({searchedUser, setSearchedUser}) => {
     <div className='searchContainer'>
     <img src="banner.png" className="banner" alt="" />
     <form onSubmit={handleSubmit}>
-      <select className='.cl' onChange={(e) => setRegion(e.target.value)}>
-        <option value="europe">EUROPE</option>
-        <option value="americas">AMERICAS</option>
-        <option value="asia">ASIA</option>
+      <select className='cl' onChange={(e) => states.setRegion(e.target.value)}>
+        <option value="europe">EUNE</option>
       </select>
       <label htmlFor="name">Name</label>
-      <input type="text" name="name" id="name" value={name} onChange={(e) => setName(e.target.value)}/>
-      <label htmlFor="tagLine">{" "}#</label>
-      <input type="text" name="tagLine" id="tagLine" placeholder='e.g.:EUNE' value={tagLine} onChange={(e)=> setTagLine(e.target.value.toLowerCase())}/>
+      <input type="text" name="name" id="name" placeholder="Game Name + #EUNE"/>
       <button type='submit'>Submit</button>
     </form>
     </div>

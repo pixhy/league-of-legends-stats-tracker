@@ -1,38 +1,112 @@
-body{
-    background-color: rgb(1,0,16);
-    color: whitesmoke;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+body {
+  background-color: rgb(1, 0, 16);
+  color: whitesmoke;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
-div.searchContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+div.searchContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-img.banner{
-    border-radius: 10px;
+img.banner {
+  border-radius: 10px;
 }
-form{
-    background-color: rgb(35, 35, 35);
-    border-radius: 10px;
-    box-shadow: inset;
-    padding: 10px;
-    color: whitesmoke;
+form {
+  background-color: rgb(35, 35, 35);
+  border-radius: 10px;
+  box-shadow: inset;
+  padding: 10px;
+  color: whitesmoke;
 }
-.oneMatch{
-    margin-bottom: 10px;
+.oneMatch {
+  margin-bottom: 10px;
 }
-input,.cl {
-    background-color: rgb(35, 35, 35);
-    border: 0px;
-    box-shadow: 0px 10px 20px rgb(1,0,16);
-    color: whitesmoke;
+input,
+.cl {
+  background-color: rgb(35, 35, 35);
+  border: 0px;
+  box-shadow: 0px 10px 20px rgb(1, 0, 16);
+  color: whitesmoke;
+}
 
-}
-
-.oneMatch{
-    display: flex;
+.oneMatch {
+  display: flex;
+  justify-content: center;
 }
 
 .individualTeam {
-    margin: 20px;
+  font-size: 25px;
+  width: 500px;
+}
+
+.individualTeam img {
+  width: 35px;
+}
+
+.userData {
+  background-color: rgb(3, 0, 39);
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.summonerIcon {
+  border-radius: 20px;
+  width: 150px;
+}
+
+.matchContainer {
+  display: flex;
+  align-items: center;
+}
+
+.summonerLevel {
+  /* position: relative;
+    top: 90%;
+    left: 50%; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  top: 90%;
+  font-weight: 700;
+}
+
+.summonerName {
+  font-size: 40px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.division {
+  display: flex;
+  align-items: center;
+}
+
+.player:hover {
+  cursor: pointer;
+}
+
+.playerWin {
+  background-color: #27344e;
+  border: 1px solid #4565a5;
+}
+
+.playerLose {
+  background-color: #59343b;
+  border: 1px solid #813846;
+}
+.searchedPlayer {
+    background-color: #0c7e08;
+}
+
+.emptyHistory {
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
 }

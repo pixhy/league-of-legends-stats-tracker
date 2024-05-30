@@ -2,47 +2,50 @@ import express from 'express';
 import mongoose from 'mongoose';
 import mongooseConnect from './mongooseConnect.js';
 import Users from './model/Users.js';
+//import fetchSummonerData from './fetchSummonerData.js';
 
-const apiKey= 'RGAPI-31f9854e-e67f-4d10-9722-d4613aa86af9'
+const apiKey = 'RGAPI-d36b7ef9-e9b1-4689-a5ab-3425560948f7';
 
 const app = express();
 mongoose.connect(mongooseConnect);
 app.use(express.json());
 
-app.get('/api/users', async (req, res) => {
-  const response = await fetch(`https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/Kol/eune?api_key=${apiKey}`)
-  const data = await response.json()
-  console.log('data',data);
-  res.json(data);
-})
-
 app.post('/api/userFromRiot', async (req, res) => {
   const region = req.body.region;
   const name = req.body.name;
   const tagLine = req.body.tagLine;
-  const response = await fetch(`https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${name}/${tagLine}?api_key=${apiKey}`)
-  const data = await response.json()
+
+
+  const response = await fetch(`https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${name}/${tagLine}?api_key=${apiKey}`);
+  const data = await response.json();
+
+  if (response.status === 404) {
+    res.status(404).json({ message: 'No such user' });
+    res.end()
+  }
+  
+  else {
   //match `https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=20&api_key=${apiKey}`
   const puuid = data.puuid;
-  if (response) {
-    const matchResponse = await fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10&api_key=${apiKey}`);
-    const matchData = await matchResponse.json()
-    if (matchData) {
+  if (puuid) {
+    const matchResponse = await fetch(
+      `https://${region}.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=10&api_key=${apiKey}`
+    );
+    const matchData = await matchResponse.json();
 
-      // const matches = Promise.all(matchData.map(async (matchId) => {
-      //   const match = await fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}` )
-      //   const jsonMatch = await match.json()
-      //   return jsonMatch
-      // }))
-      const matches= [];
+    if (matchData.length > 0) {
+      const matches = [];
 
-      for(let matchId of matchData) {
-        const match = await fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}` );
+      for (let matchId of matchData) {
+        const participants = [];
+        const match = await fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}`);
         const jsonMatch = await match.json();
-        
-        const participants = []
-        for(const participant of jsonMatch.info.participants) {
+
+        for (const participant of jsonMatch.info.participants) {
           participants.push({
+            region: region,
+            profileIcon: participant.profileIcon,
+            summonerId: participant.summonerId,
             championName: participant.championName,
             individualPosition: participant.individualPosition,
             item0: participant.item0,
@@ -57,7 +60,7 @@ app.post('/api/userFromRiot', async (req, res) => {
             deaths: participant.deaths,
             summonerLevel: participant.summonerLevel,
             riotIdGameName: participant.riotIdGameName,
-            riotIdTagLine: participant.riotIdTagLine,
+            riotIdTagline: participant.riotIdTagline,
             visionScore: participant.visionScore,
             damageDealtToBuildings: participant.damageDealtToBuildings,
             damageDealtToObjectives: participant.damageDealtToObjectives,
@@ -81,8 +84,8 @@ app.post('/api/userFromRiot', async (req, res) => {
             champLevel: participant.champLevel,
             championId: participant.championId,
             championName: participant.championName,
-            win: participant.win
-          })
+            win: participant.win,
+          });
         }
 
         matches.push({
@@ -99,7 +102,7 @@ app.post('/api/userFromRiot', async (req, res) => {
               horde: jsonMatch.info.teams[0].objectives.horde.kills,
               inhibitor: jsonMatch.info.teams[0].objectives.inhibitor.kills,
               riftHerald: jsonMatch.info.teams[0].objectives.riftHerald.kills,
-              win: jsonMatch.info.teams[0].objectives.win
+              win: jsonMatch.info.teams[0].objectives.win,
             },
             {
               baron: jsonMatch.info.teams[1].objectives.baron.kills,
@@ -108,15 +111,39 @@ app.post('/api/userFromRiot', async (req, res) => {
               horde: jsonMatch.info.teams[1].objectives.horde.kills,
               inhibitor: jsonMatch.info.teams[1].objectives.inhibitor.kills,
               riftHerald: jsonMatch.info.teams[1].objectives.riftHerald.kills,
-              win: jsonMatch.info.teams[1].objectives.win
-            }
-          ]
+              win: jsonMatch.info.teams[1].objectives.win,
+            },
+          ],
         });
       }
-      res.json(matches)
+
+      const fetchSummonerId = await fetch(`https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${apiKey}`);
+      const fetchResponse = await fetchSummonerId.json();
+      const summonerId = fetchResponse.id;
+      const profileIconId = fetchResponse.profileIconId;
+      const summonerLevel = fetchResponse.summonerLevel;
+      const profileData = { summonerId, profileIconId, summonerLevel, name: name, tagLine: tagLine };
+
+      const fetchRankedData = await fetch(`https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${apiKey}`);
+      const rankedDataAll = await fetchRankedData.json();
+
+      //const summonerData = fetchSummonerData(puuid, apiKey);
+      res.json({ matches, rankedDataAll, profileData });
+    } else {
+      //player has no match history - fetch summoner ID, summoner level and profile icon
+      const fetchSummonerId = await fetch(`https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${apiKey}`);
+      const fetchResponse = await fetchSummonerId.json();
+      const summonerId = fetchResponse.id;
+      const profileIconId = fetchResponse.profileIconId;
+      const summonerLevel = fetchResponse.summonerLevel;
+
+      const profileData = { summonerId, profileIconId, summonerLevel };
+      console.log('rankedData', profileData);
+      //const summonerData = fetchSummonerData(puuid, apiKey);
+      res.json(profileData);
     }
-  }
-})
+  } }
+});
 
 app.get('/api/stats', (req, res) => {
   res.status(200).json({ message: 'ok' });
