@@ -1,6 +1,7 @@
 const User = ({ profile }) => {
   const user = profile.profileData;
-  const rank = profile.rankedDataAll[0].tier ? profile.rankedDataAll[0] : profile.rankedDataAll[1];
+  const rank = profile.rankedDataAll.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5")
+
   if (profile.message) {
     return <div className="profileError">{profile.message}</div>;
   }
