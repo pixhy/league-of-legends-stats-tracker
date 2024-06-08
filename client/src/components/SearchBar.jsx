@@ -38,7 +38,7 @@ const SearchBar = ({searchedUser, setSearchedUser, states, setError}) => {
     };
     fetchUser();
 
-  }, [states.submitted, firstSubmit]);
+  }, [states, firstSubmit]);
 
   useEffect(() => {
     if (!firstSubmit) return

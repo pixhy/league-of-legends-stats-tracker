@@ -11,7 +11,7 @@ let servers = [
 ];
 
 
-const key = 'RGAPI-cfa67bd7-8ff3-4212-829d-9fef696bf635'
+const key = 'RGAPI-2ec904be-694f-4e2c-9074-0a2efa169313'
 const queue = 'RANKED_SOLO_5x5';
 let serverRateLimit = {}
 
@@ -71,6 +71,12 @@ async function fetchRiotAPI(server, endpoint){
 const league_tier = ['DIAMOND', 'EMERALD', 'PLATINUM', 'GOLD', 'SILVER', 'BRONZE', 'IRON']
 const league_division = ['I', 'II', 'III', 'IV']
 
+let extraTiers = { // eun1.api.riotgames.com
+  MASTER: "lol/league/v4/masterleagues/by-queue/RANKED_SOLO_5x5",
+  GRANDMASTER: "lol/league/v4/grandmasterleagues/by-queue/RANKED_SOLO_5x5",
+  CHALLENGER: "lol/league/v4/challengerleagues/by-queue/RANKED_SOLO_5x5",
+ }
+
 async function fetchDivisionList(tier, division){
   console.log("fetching ",tier,division)
   let list = []
@@ -106,7 +112,7 @@ async function fetchUserData(divisionList){
 async function main(){
 	for (let tier of league_tier){
 	  for(let div of league_division){
-      let outfile = `${tier}_${div}.json`
+      let outfile = `rankedData/${tier}_${div}.json`
 	    if(fs.existsSync(outfile))continue;
 	    let partial = `${tier}_${div}_partial.json`
 	    let list
@@ -133,6 +139,14 @@ async function main(){
 	    }
 	  }
 	}
+  for (let [extraTier,url] of Object.entries(extraTiers)){
+    let outfile = `rankedData/${extraTier}.json`;
+    if(fs.existsSync(outfile))continue;
+    let data  = await fetchRiotAPI("eun1.api.riotgames.com", url)
+    let list = data.entries
+    await fetchUserData(list)
+    fs.writeFileSync(outfile, JSON.stringify(list))
+  }
 }
 
 main()
