@@ -162,13 +162,21 @@ app.post('/api/matches', async (req, res) => {
 
 app.get('/api/users/:gameName', async (req, res) => {
   if (req.params.gameName.length > 2 && req.params.gameName !== null && req.params.gameName !== '') {
-    const firstuser = (await Users.find({ gameName: req.params.gameName })).slice(0, 2);
-    // users.push(firstuser)
-    const nameRegex = new RegExp('^' + req.params.gameName);
-    const user = (await Users.find({ gameName: { $regex: nameRegex, $options: 'i' } })).slice(0, 5);
-
-    const data = Object.assign(user, firstuser);
-    // console.log(data);
+    const nameRegex = req.params.gameName;
+    let data = await Users.aggregate([
+      {
+        $match: { gameName: { $regex: '^' + nameRegex, $options: 'i' } }
+      },
+      {
+        $addFields: { gameNameLength: { $strLenCP: "$gameName" } }
+      },
+      {
+        $sort: { gameNameLength: 1 }
+      },
+      {
+        $limit: 5
+      }
+    ]);
     res.json(data);
   }
 });

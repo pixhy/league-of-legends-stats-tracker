@@ -55,6 +55,8 @@ const SearchBar = ({searchedUser, setSearchedUser, states, setError}) => {
         const response = await fetch(`/api/users/${gameName}`);
         const user = await response.json();
         setSearchedUsers(user);
+      } else{
+        setSearchedUsers(null)
       }
     };
     fetchUserFromDB()
