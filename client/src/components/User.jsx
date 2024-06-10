@@ -4,7 +4,7 @@ import MatchHistory from './MatchHistory';
 const User = ({ profile }) => {
   const [matchHistory, setMatchHistory] = useState(null);
   const [loading, setLoading] = useState(true);
-  const rank = profile.rankedDataAll.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5")
+  // const rank = profile.rankedDataAll.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5")
   // const user = profile.profileData;
   // const rank = profile.rankedDataAll[0].tier ? profile.rankedDataAll[0] :nkeofile.rankedDataAll[1];
   // if (profile.message) {

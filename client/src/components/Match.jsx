@@ -19,9 +19,9 @@ const Match = ({ match }) => {
       <div className={'fullTeam1 individualTeam'}>
         {team1.map((player) => (
           <div className={`team1 individualTeam ${player.win ? 'playerWin' : 'playerLose'}`} key={player.riotIdGameName + match.matchId}>
-            <div className={`matchContainer ${player.riotIdGameName === states.name ? "searchedPlayer" : ""}`}>
+            <div className={`matchContainer`}>
               <img src={`champion/${player.championName.toLowerCase()}.png`} alt="" />
-              <span className={`${player.riotIdTagline} ${player.region} player`} onClick={onPlayerClickHandler}>
+              <span className={`${player.riotIdTagline} ${player.region} player`}>
                 {player.riotIdGameName}
               </span>
             </div>
@@ -31,9 +31,9 @@ const Match = ({ match }) => {
       <div className={'fullTeam2 individualTeam'}>
         {team2.map((player) => (
           <div className={`team2 individualTeam ${player.win ? 'playerWin' : 'playerLose'}`} key={player.riotIdGameName + match.matchId}>
-            <div className={`matchContainer ${player.riotIdGameName === states.name ? "searchedPlayer" : ""}`}>
+            <div className={`matchContainer`}>
               <img src={`champion/${player.championName.toLowerCase()}.png`} alt="" />
-              <span className={`${player.riotIdTagline} ${player.region} player`} onClick={onPlayerClickHandler}>
+              <span className={`${player.riotIdTagline} ${player.region} player`}>
                 {player.riotIdGameName}
               </span>
             </div>
