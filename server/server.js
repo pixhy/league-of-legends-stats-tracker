@@ -1,13 +1,13 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import mongooseConnect from './mongooseConnect.js';
+
 import Users from './model/Users.js';
 //import fetchSummonerData from './fetchSummonerData.js';
 
 const apiKey = 'RGAPI-952c488c-78a1-47cd-9dd6-7fbe9d4b6e39';
 
 const app = express();
-mongoose.connect(mongooseConnect);
+
 app.use(express.json());
 
 app.post('/api/userFromRiot', async (req, res) => {
@@ -30,13 +30,15 @@ app.post('/api/userFromRiot', async (req, res) => {
       );
       const matchData = await matchResponse.json();
 
-      if (matchData.length > 0) {
-        const matches = [];
+    if (matchList.length > 0) {
+      const matches = [];
 
-        for (let matchId of matchData) {
-          const participants = [];
-          const match = await fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}`);
-          const jsonMatch = await match.json();
+      const matchData = await Promise.all(matchList.map(matchId => fetch(`https://${region}.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}`)));
+
+      for (let match of matchData) {
+        const participants = [];
+        
+        const jsonMatch = await match.json();
 
           for (const participant of jsonMatch.info.participants) {
             participants.push({
@@ -134,13 +136,12 @@ app.post('/api/userFromRiot', async (req, res) => {
         const profileIconId = fetchResponse.profileIconId;
         const summonerLevel = fetchResponse.summonerLevel;
 
-        const profileData = { summonerId, profileIconId, summonerLevel };
-        console.log('rankedData', profileData);
-        //const summonerData = fetchSummonerData(puuid, apiKey);
-        res.json(profileData);
-      }
+      const profileData = { summonerId, profileIconId, summonerLevel };
+      console.log('rankedData', profileData);
+      //const summonerData = fetchSummonerData(puuid, apiKey);
+      res.json(profileData);
     }
-  }
+  } 
 });
 
 app.post('/api/matches', async (req, res) => {
