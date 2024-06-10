@@ -1,7 +1,6 @@
 import './App.css';
 import { useState } from 'react';
 import SearchBar from './components/SearchBar';
-import MatchHistory from './components/MatchHistory';
 import User from './components/User';
 
 function App() {
@@ -19,7 +18,6 @@ function App() {
       {!error && searchedUser ? (
         <>
           <User profile={searchedUser} />
-          <MatchHistory matchHistory={searchedUser} states={FetchStates} setSearchedUser={setSearchedUser}/>
         </>
       ) : (
         <div className='emptyHistory'>No search results for {`${name}`} in the Europe Nordic & East region.</div>

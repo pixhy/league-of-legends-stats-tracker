@@ -1,27 +1,25 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Match from './Match';
+import Loading from './Loading/Loading';
 
-const MatchHistory = ({ matchHistory, states , setSearchedUser}) => {
+const MatchHistory = ({ matchHistory, loading }) => {
   console.log('matchHistory', matchHistory);
-  // const [matchData, setMatchData] = useEffect(null)
-  useEffect(() => {
-    // console.log("matchHistory in useEffect: ", matchHistory)
-    // setMatchData(matchHistory)
-  }, [matchHistory]);
-
-  console.log("matches: ",matchHistory.matches)
+  console.log(matchHistory[0].metadata.matchId)
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <>
-      {matchHistory.matches.length > 0 ? (
+      {matchHistory.length > 0 ? (
         <>
           <div>
-            {matchHistory.matches.map((match, i) => (
-              <Match match={match} key={i} states={states} setSearchedUser={setSearchedUser}/>
+            {matchHistory.map((match) => (
+              <Match key={match.metadata.matchId} match={match} />
             ))}
           </div>
         </>
       ) : (
-        <div className='emptyHistory'>There are no results recorded.</div>
+        <div className="emptyHistory">There are no results recorded.</div>
       )}
     </>
   );
