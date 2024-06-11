@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import Match from './Match';
 import Loading from './Loading/Loading';
 

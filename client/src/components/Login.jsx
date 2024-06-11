@@ -1,17 +1,6 @@
 import { useState, useEffect } from "react";
 
-const users = [
-  {
-    username: "admin1",
-    password: "123",
-  },
-  {
-    username: "admin2",
-    password: "012",
-  },
-];
-
-export default function Login({ setShowLogin, setLogged }) {
+export default function Login({ setShowLogin, setLogged, setUsername }) {
   const [data, setData] = useState({
     username: "",
     password: "",
@@ -57,6 +46,7 @@ export default function Login({ setShowLogin, setLogged }) {
       if (response.ok) {
         setShowLogin(false);
         setLogged(true);
+        setUsername(data.username);
         console.log("Login successful");
       } else {
         setErrorMessage(result.message);
@@ -90,6 +80,7 @@ export default function Login({ setShowLogin, setLogged }) {
       if (response.ok) {
         setShowLogin(false);
         setLogged(true);
+        setUsername(newUserData.username);
         console.log("User registered successfully");
       } else {
         setErrorMessage(result.message);
@@ -100,7 +91,6 @@ export default function Login({ setShowLogin, setLogged }) {
       setErrorMessage("Server error, please try again later.");
     }
   };
-
   return (
     <>
       <div className="App">

@@ -6,12 +6,10 @@ const User = ({ profile }) => {
   const [loading, setLoading] = useState(true);
   // const rank = profile.rankedDataAll.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5")
   // const user = profile.profileData;
-  // const rank = profile.rankedDataAll[0].tier ? profile.rankedDataAll[0] :nkeofile.rankedDataAll[1];
+
   // if (profile.message) {
   //   return <div className="profileError">{profile.message}</div>;
   // }
-
-  // console.log("profile.rankedDataAll[0]: ",profile.rankedDataAll[0]);
 
   useEffect(() => {
     const fetchMatchHistory = async () => {
@@ -26,13 +24,14 @@ const User = ({ profile }) => {
       const history = await response.json();
       console.log('history', history);
       setMatchHistory(history);
+      console.log(matchHistory)
       setLoading(false);
     };
     fetchMatchHistory();
   }, [profile]);
 
   async function refreshProfile(){
-    
+
   }
 
 
