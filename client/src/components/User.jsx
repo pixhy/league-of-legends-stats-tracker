@@ -1,19 +1,12 @@
 import { useEffect, useState } from 'react';
 import MatchHistory from './MatchHistory';
 
-const User = ({ profile }) => {
+const User = ({ setCurrentUser, profile }) => {
   const [matchHistory, setMatchHistory] = useState(null);
   const [loading, setLoading] = useState(true);
-  // const rank = profile.rankedDataAll.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5")
-  // const user = profile.profileData;
-
-  // if (profile.message) {
-  //   return <div className="profileError">{profile.message}</div>;
-  // }
 
   useEffect(() => {
     const fetchMatchHistory = async () => {
-      console.log(profile.puuid);
       const response = await fetch('/api/matches', {
         method: 'POST',
         headers: {
@@ -22,18 +15,19 @@ const User = ({ profile }) => {
         body: JSON.stringify({ puuid: profile.puuid }),
       });
       const history = await response.json();
-      console.log('history', history);
       setMatchHistory(history);
-      console.log(matchHistory)
       setLoading(false);
     };
     fetchMatchHistory();
   }, [profile]);
 
   async function refreshProfile(){
-
+    const response = await fetch(`/api/updateUserDB/${profile._id}`)
+    if (response.status === 200){
+      const data = await response.json()
+      setCurrentUser(data)
+    }
   }
-
 
   return (
     <div>

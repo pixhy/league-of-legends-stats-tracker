@@ -10,11 +10,18 @@ const UserSchema =  new Schema({
   leaguePoints: Number,
   wins: Number,
   losses: Number,
+  veteran: Boolean,
+  inactive: Boolean,
+  freshBlood: Boolean,
+  hotSteak: Boolean,
+  id: String,
   puuid: String,
   accountId: String,
   profileIconId: Number,
   summonerLevel: Number,
-  revisionDate: Number
+  revisionDate: Number,
+  gameName: String,
+  tagLine: String
 });
 
 export default model('Users', UserSchema);

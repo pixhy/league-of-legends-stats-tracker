@@ -2,8 +2,8 @@ import Match from './Match';
 import Loading from './Loading/Loading';
 
 const MatchHistory = ({ matchHistory, loading, profile }) => {
-  console.log('matchHistory', matchHistory);
-  console.log(matchHistory[0].metadata.matchId)
+  //console.log('matchHistory', matchHistory);
+  console.log('matchHistory', matchHistory[0].metadata.matchId)
   if (loading) {
     return <Loading />;
   }

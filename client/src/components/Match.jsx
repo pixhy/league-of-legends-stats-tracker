@@ -3,19 +3,19 @@ import Loading from './Loading/Loading';
 
 const Match = ({ match, profile, loading }) => {
   const [isOpen, setIsOpen] = useState(false)
-  console.log("match", match)
-  console.log("profile", profile)
+  //console.log("match", match)
+  //console.log("profile", profile)
   const team1 = match.info.participants.filter((player) => player.teamId === 100);
   const team2 = match.info.participants.filter((player) => player.teamId !== 100);
   const userProfile = match.info.participants.find(player => {
     // console.log("player.summonerId",player.summonerId)
     // console.log('profile.summonerId',profile.summonerId);
     if (player.summonerId === profile.summonerId) {
-      console.log("itt van cuncikám :)")
+      //console.log("itt van cuncikám :)")
     }
     return player.summonerId === profile.summonerId
   });
-  console.log('userProfile', userProfile)
+  //console.log('userProfile', userProfile)
 
   // console.log(history.participants)
 

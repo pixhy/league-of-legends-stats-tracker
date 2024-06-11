@@ -1,20 +1,18 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import User from './components/User';
 import Login from './components/Login';
 
 function App() {
-  const [searchedUser, setSearchedUser] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState('');
-  const [tagLine, setTagLine] = useState('');
-  const [region, setRegion] = useState('europe');
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const [nameWithTagLine, setNameWithTagLine] = useState({name: "", tagLine: ""});
   const [error, setError] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [logged, setLogged] = useState(false);
   const [username, setUsername] = useState(""); 
-  const FetchStates = {submitted, setSubmitted, name, setName, tagLine, setTagLine, region, setRegion}
+
 
   const handleLoginClick = () => {
     if (logged) {
@@ -28,6 +26,31 @@ function App() {
   const closeModal = () => {
     setShowLogin(false);
   };
+  useEffect(() => {
+
+    async function fetchUserFromLiveServer() {
+      try {
+        const response = await fetch(`/api/users/?name=${nameWithTagLine.name}&tagLine=${nameWithTagLine.tagLine}`);
+        const user = await response.json();
+        console.log('user', user);
+        if (response.status === 404) {
+          console.log('404 error');
+          setError(true);
+        } else if (response.status === 200) {
+          setError(false);
+          setCurrentUser(user);
+        } else if (response.status === 500) {
+          console.log('500 error');
+        }
+      } catch (error) {
+        console.log('Some error lel kek: ', error);
+      }
+    }
+    if (nameWithTagLine.name.length > 0 && nameWithTagLine.tagLine.length > 0){
+      fetchUserFromLiveServer()
+    }
+
+  }, [ nameWithTagLine ]);
 
   return (
     <>
@@ -51,14 +74,12 @@ function App() {
           </div>
         </div>
       )}
-      <SearchBar searchedUser={searchedUser} setSearchedUser={setSearchedUser} states={FetchStates}  setError={setError}/>
-      {!error && searchedUser ? (
+      <SearchBar setCurrentUser={setCurrentUser} setNameWithTagLine={setNameWithTagLine}  setError={setError}/>
+      {!error && currentUser ? (
         <>
-          <User profile={searchedUser} />
+          <User profile={currentUser} setCurrentUser={setCurrentUser}/>
         </>
-      ) : (
-        <div className='emptyHistory'>No search results for {`${name}`} in the Europe Nordic & East region.</div>
-      )}
+      ) : (<></>)}
     </>
   );
 }
