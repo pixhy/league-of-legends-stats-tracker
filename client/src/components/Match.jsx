@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import Loading from './Loading/Loading';
 
-const Match = ({ match, profile }) => {
+const Match = ({ match, profile, loading }) => {
   const [isOpen, setIsOpen] = useState(false)
   console.log("match", match)
   console.log("profile", profile)
@@ -20,6 +21,9 @@ const Match = ({ match, profile }) => {
   //   states.setSubmitted((prev) => !prev);
   // };
 
+  if(loading) {
+    return <Loading/>
+  }
   return (
     
     <>

@@ -14,7 +14,7 @@ const MatchHistory = ({ matchHistory, loading, profile }) => {
         <>
           <div>
             {matchHistory.map((match) => (
-              <Match key={match.metadata.matchId} match={match} profile={profile}/>
+              <Match key={match.metadata.matchId} match={match} profile={profile} loading={loading}/>
             ))}
           </div>
         </>
