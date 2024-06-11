@@ -87,7 +87,7 @@ const SearchBar = ({searchedUser, setSearchedUser, states, setError}) => {
       <button type='submit'>Submit</button>
     </form>
       {gameName ? 
-      <table><tbody>{searchedUsers ? searchedUsers.map(user => <tr key={user._id}><td onClick={() => handleSummonerClick(user)}>{user.gameName}#{user.tagLine}</td></tr>) : ""}</tbody></table> 
+      <table><tbody>{searchedUsers ? searchedUsers.map(user => <tr key={user._id}><td onClick={() => handleSummonerClick(user)}><img src={`profileicon/${user.profileIconId}.png`} width='30px'/>{user.gameName}#{user.tagLine}</td></tr>) : ""}</tbody></table> 
       : ""}
 
     </div>
