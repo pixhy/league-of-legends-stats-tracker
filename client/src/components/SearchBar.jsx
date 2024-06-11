@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 const SearchBar = ({searchedUser, setSearchedUser, states, setError}) => {
 
-  // let message = useRef(null)
+
   const [firstSubmit, setFirstSubmit] = useState(false);
   const [gameName, setGameName] = useState("");
   const [searchedUsers, setSearchedUsers] = useState(null);
@@ -42,7 +42,7 @@ const SearchBar = ({searchedUser, setSearchedUser, states, setError}) => {
 
     
 
-  }, [states.submitted, firstSubmit, gameName]);
+  }, [firstSubmit, gameName]);
 
   useEffect(() => {
     if(!firstSubmit){
@@ -65,33 +65,19 @@ const SearchBar = ({searchedUser, setSearchedUser, states, setError}) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("form", e.target[1].value)
     setFirstSubmit(true);
     states.setSubmitted(prev => !prev)
-    separateUserNameAndTag(e.target[1].value)
   }
 
-  function separateUserNameAndTag(name){
-    if(name.includes("#")){
-      let gameName = name.split("#")[0]
-      let tagLine = name.split("#")[1].toLowerCase()
-      states.setName(gameName)
-      states.setTagLine(tagLine)
-    } else{
-      console.log("Enter correct username!")
-    }
-  }
   
   const handleSummonerClick = (user) =>{
-    console.log(user)
     setSearchedUser(user)
     setGameName("");
-    console.log(searchedUser)
   }
 
   return (
     <div className='searchContainer'>
-    <img src="banner.png" className="banner" alt="" />
+    <a href="/"><img src="banner.png" className="banner" alt="" /></a>
     <form onSubmit={handleSubmit}>
       <select className='cl' onChange={(e) => states.setRegion(e.target.value)}>
         <option value="europe">EUNE</option>

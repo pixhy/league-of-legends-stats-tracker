@@ -31,6 +31,11 @@ const User = ({ profile }) => {
     fetchMatchHistory();
   }, [profile]);
 
+  async function refreshProfile(){
+    
+  }
+
+
   return (
     <div>
       <div className="userData">
@@ -62,8 +67,9 @@ const User = ({ profile }) => {
             </div>
           </div>
         )}
+        <button id="refreshButton" onClick={refreshProfile}>Refresh</button>
       </div>
-      {!loading ? <MatchHistory matchHistory={matchHistory} loading={loading} /> : ''}
+      {!loading ? <MatchHistory matchHistory={matchHistory} loading={loading} profile={profile}/> : ''}
     </div>
   );
 };

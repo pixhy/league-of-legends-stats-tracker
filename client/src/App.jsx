@@ -6,15 +6,12 @@ import User from './components/User';
 function App() {
   const [searchedUser, setSearchedUser] = useState(null);
   const [submitted, setSubmitted] = useState(false);
-  const [name, setName] = useState('');
-  const [tagLine, setTagLine] = useState('');
-  const [region, setRegion] = useState('europe');
   const [error, setError] = useState(false);
-  const FetchStates = {submitted, setSubmitted, name, setName, tagLine, setTagLine, region, setRegion}
+  const FetchStates = {submitted, setSubmitted}
 
   return (
     <>
-      <SearchBar searchedUser={searchedUser} setSearchedUser={setSearchedUser} states={FetchStates} setError={setError}/>
+      <SearchBar searchedUser={searchedUser} setSearchedUser={setSearchedUser} states={FetchStates}  setError={setError}/>
       {!error && searchedUser ? (
         <>
           <User profile={searchedUser} />

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Match from './Match';
 import Loading from './Loading/Loading';
 
-const MatchHistory = ({ matchHistory, loading }) => {
+const MatchHistory = ({ matchHistory, loading, profile }) => {
   console.log('matchHistory', matchHistory);
   console.log(matchHistory[0].metadata.matchId)
   if (loading) {
@@ -14,7 +14,7 @@ const MatchHistory = ({ matchHistory, loading }) => {
         <>
           <div>
             {matchHistory.map((match) => (
-              <Match key={match.metadata.matchId} match={match} />
+              <Match key={match.metadata.matchId} match={match} profile={profile}/>
             ))}
           </div>
         </>
