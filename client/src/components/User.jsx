@@ -1,11 +1,22 @@
 import { useEffect, useState } from 'react';
 import MatchHistory from './MatchHistory';
+import { useOutletContext } from 'react-router-dom';
+
 
 const User = ({ setCurrentUser, profile, setNameWithTagLine }) => {
+  const userName = localStorage.getItem("username")
+
   const [matchHistory, setMatchHistory] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [addFavorite, setAddFavorite] = useState(false);
+  console.log("profile.gameName",profile.gameName)
+  //const [currentUser, setCurrentUser] = useOutletContext()
+  //console.log("selectedUser", selectedUser)
+
+
 
   useEffect(() => {
+    
     const fetchMatchHistory = async () => {
       const response = await fetch('/api/matches', {
         method: 'POST',
@@ -19,7 +30,23 @@ const User = ({ setCurrentUser, profile, setNameWithTagLine }) => {
       setLoading(false);
     };
     fetchMatchHistory();
-  }, [profile]);
+
+    const addToFavorites = async () =>{
+      fetch(`/api/favoritePlayers/${userName}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': "application/json",
+        },
+        body: JSON.stringify({favoritePlayerId: profile._id})
+      })
+    }
+    if (!addFavorite) {
+      return
+    } else {
+      addToFavorites()
+      setAddFavorite(false);
+    }
+  }, [profile, addFavorite]);
 
   async function refreshProfile(){
     const response = await fetch(`/api/updateUserDB/${profile._id}`)
@@ -61,6 +88,8 @@ const User = ({ setCurrentUser, profile, setNameWithTagLine }) => {
           </div>
         )}
         <button id="refreshButton" onClick={refreshProfile}>Refresh</button>
+        <button className='favourite' onClick={() => setAddFavorite(true)}><img src="/icon-bookmark.svg" alt="" /></button>
+
       </div>
       {!loading ? <MatchHistory matchHistory={matchHistory} loading={loading} profile={profile} setNameWithTagLine={setNameWithTagLine}/> : ''}
     </div>

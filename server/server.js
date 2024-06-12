@@ -56,7 +56,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/change-password", async (req, res) => {
-  const { username, newPassword } = req.body;
+  const { username, currentPassword ,newPassword } = req.body;
 
   try {
     const user = await PageUsers.findOne({ username });
@@ -64,15 +64,70 @@ app.post("/api/change-password", async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
 
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch){
+      return res.status(400).json({message: "ur memory is sh*t"})
+    }
+
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
 
-    res.status(200).json({ message: "Password changed successfully" });
+    res.status(200).json({ message: "ok. u changed morron hope u forget it in 5sxd" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+app.put('/api/favoritePlayers/:username', async(req, res) => {
+  try {
+    const username = req.params.username
+    console.log(username)
+    const {favoritePlayerId} = req.body;
+    console.log(favoritePlayerId)
+    const updatedUser = await PageUsers.findOneAndUpdate(
+      {username: username},
+      {$addToSet: {favoritePlayers: favoritePlayerId}},
+      {new: true, useFindAndModify: false}
+    );
+    res.json(updatedUser);
+  } catch (error) {
+    
+  }
+})
+
+app.get('/api/favoritePlayers/:username', async (req, res) => {
+  try {
+    const username = req.params.username
+    const user = await PageUsers.findOne({username : username}).populate("favoritePlayers").exec()
+    if (!user) {
+      res.status(404).json({message: "User not found"})
+    }
+    res.json(user.favoritePlayers)
+  } catch (error) {
+    res.status(500).json({message: "Server error"})
+  }
+})
+
+app.delete('/api/favoritePlayers/:username/:favoriteId', async (req, res) => {
+  const {username, favoriteId} = req.params;
+  console.log('username',username , 'favoriteId', favoriteId);
+
+  try {
+    const user = await PageUsers.findOne({username: username});
+    if(!user){
+      return res.status(400).json({message: "no user found"})
+    }
+
+    user.favoritePlayers = user.favoritePlayers.filter(player => player._id.toString() !== favoriteId);
+    await user.save()
+
+    res.status(200).json({message: 'kitorolve mint a feneked'})
+  } catch (error) {
+    res.status(500).json({message: 'Server error'})
+  }
+})
 
 app.delete("/api/delete-profile", async (req, res) => {
   const { username } = req.body;
@@ -162,12 +217,10 @@ app.get("/api/updateUserDB/:id", async (req, res) => {
     ),
   ]);
   if (profileResponse.status != 200) {
-    console.log("profileResponse", await profileResponse.text());
     res.status(500).end();
     return;
   }
   if (rankedResponse.status != 200) {
-    console.log("rankedResponse", await rankedResponse.text());
     res.status(500).end();
     return;
   }
@@ -191,7 +244,6 @@ app.post("/api/matches", async (req, res) => {
     `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=3&api_key=${apiKey}`
   );
   const matchList = await matchResponse.json();
-  console.log(matchList);
 
   const matchData = await Promise.all(
     matchList.map((matchId) =>
@@ -207,7 +259,6 @@ app.post("/api/matches", async (req, res) => {
     const jsonMatch = await match.json();
     matches.push(jsonMatch);
   }
-  console.log(matches);
   res.json(matches);
 });
 
@@ -238,4 +289,6 @@ app.get("/api/usersearch/:gameName", async (req, res) => {
     res.json(data);
   }
 });
+
+
 app.listen(3000, () => console.log("http://localhost:3000"));

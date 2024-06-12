@@ -1,3 +1,4 @@
+
 body {
   background-color: rgb(1, 0, 16);
   color: whitesmoke;
@@ -19,20 +20,21 @@ form {
   padding: 10px;
   color: whitesmoke;
 }
-.oneMatch {
-  margin-bottom: 10px;
-}
+
 input,
 .cl {
   background-color: rgb(35, 35, 35);
   border: 0px;
-  box-shadow: 0px 10px 20px rgb(1, 0, 16);
+  /* box-shadow: 0px 10px 20px rgb(1, 0, 16); */
   color: whitesmoke;
+  height: 35px;
+  margin-right: 5px;
 }
 
 .oneMatch {
   display: flex;
   justify-content: center;
+  margin-bottom: 10px;
 }
 
 .individualTeam {
@@ -54,7 +56,7 @@ input,
 
 .summonerIcon {
   border-radius: 20px;
-  width: 150px;
+  width: 140px;
 }
 
 .matchContainer {
@@ -226,6 +228,107 @@ input,
   align-items: center;
 }
 
-.searchAutoComplete {
-  z-index: -1;
+/* .autoCompletebgrnd{
+  display: flex;
+  position: relative;
+  z-index: 1;
+  background-color: black;
+  
+  justify-content: center;
+  align-items: end;
+} */
+
+#searchAutoComplete {
+background-color: #27344eee;
+  position: absolute; /* Stay in place */
+  margin-left: -7%;
+  z-index: 1;
+}
+
+.currentPlayer img{
+  width: 48px;
+}
+
+.summonerSpells img, .items img{
+  width: 22px;
+}
+
+.theMatch{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  height: 185px;
+}
+
+.currentPlayer{
+  padding: 20px;
+  background-color: rgb(3, 0, 39);
+}
+
+.matchResult {
+  width: 70px;
+  padding-top: 60px;
+  padding-left: 25px;
+  background-color: rgb(3, 0, 39);
+}
+
+.currPlayer{
+  background-color: green;
+}
+
+button{
+  border: 1px;
+  padding: 12px 25px;
+  background-color: rgb(88, 88, 88);
+  color: white;
+  border-radius: 5%;
+  font-size: 15px;
+  margin-right: 5px;
+}
+
+button:hover{
+  background-color: rgb(145, 143, 143);
+}
+
+#refreshButton{
+  margin-left: 50px;
+}
+
+.favourite{
+  border-color: var(--gray250);
+  background-color: rgb(145, 143, 143, 0);
+ 
+}
+.favUser{
+  display: flex;
+  align-items: center;
+  border: 2px solid white;
+  width: 200px;
+  margin-top: 20px;
+  border-radius: 3px;
+}
+
+.favUser img{
+  width: 50px;
+}
+li{
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+}
+
+.favUser:hover {
+  cursor: pointer;
+  color: magenta;
+  border-color: magenta;
+}
+
+.link-buttons {
+  text-decoration: none;
+  color: white;
+}
+
+.link-buttons:hover{
+  background-color: rgb(145, 143, 143);
+  cursor: pointer;
 }
