@@ -7,7 +7,7 @@ import PageUsers from "./model/PageUsers.js";
 
 //import fetchSummonerData from './fetchSummonerData.js';
 
-const apiKey = "RGAPI-84be12ce-79a8-4e41-9764-80bf594e5993";
+const apiKey = "RGAPI-a9294a10-16ff-445e-bafe-a523aca2b08a";
  
 const app = express();
 mongoose.connect(mongooseConnect);
