@@ -55,9 +55,7 @@ const SearchBar = ({ setCurrentUser, setNameWithTagLine }) => {
 
   return (
     <div className="searchContainer">
-      <a href="/">
-        <img src="banner.png" className="banner" alt="" />
-      </a>
+      
       <form onSubmit={handleSubmit}>
         <select className="cl">
           <option value="europe">EUNE</option>
@@ -75,7 +73,7 @@ const SearchBar = ({ setCurrentUser, setNameWithTagLine }) => {
         <button type="submit">Submit</button>
       </form>
       {searchInput ? (
-        <table>
+        <table id="searchAutoComplete">
           <tbody>
             {searchedUsers
               ? searchedUsers.map((user) => (

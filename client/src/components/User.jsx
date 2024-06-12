@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import MatchHistory from './MatchHistory';
 
-const User = ({ setCurrentUser, profile }) => {
+const User = ({ setCurrentUser, profile, setNameWithTagLine }) => {
   const [matchHistory, setMatchHistory] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -62,7 +62,7 @@ const User = ({ setCurrentUser, profile }) => {
         )}
         <button id="refreshButton" onClick={refreshProfile}>Refresh</button>
       </div>
-      {!loading ? <MatchHistory matchHistory={matchHistory} loading={loading} profile={profile}/> : ''}
+      {!loading ? <MatchHistory matchHistory={matchHistory} loading={loading} profile={profile} setNameWithTagLine={setNameWithTagLine}/> : ''}
     </div>
   );
 };

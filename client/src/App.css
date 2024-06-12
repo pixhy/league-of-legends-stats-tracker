@@ -218,3 +218,14 @@ input,
 .fade-out.fade-out-effect {
   opacity: 0;
 }
+
+.banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchAutoComplete {
+  z-index: -1;
+}

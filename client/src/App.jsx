@@ -12,6 +12,7 @@ function App() {
     name: "",
     tagLine: "",
   });
+
   const [error, setError] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [logged, setLogged] = useState(false);
@@ -93,14 +94,23 @@ function App() {
           </div>
         </div>
       )}
-      <SearchBar
-        setCurrentUser={setCurrentUser}
-        setNameWithTagLine={setNameWithTagLine}
-        setError={setError}
-      />
+      <div className="banner">
+        <Link to="/" onClick={() => setCurrentUser(null)}>
+          <img src="banner.png" alt="" />
+        </Link>
+        <SearchBar
+          setCurrentUser={setCurrentUser}
+          setNameWithTagLine={setNameWithTagLine}
+          setError={setError}
+        />
+      </div>
       {!error && currentUser ? (
         <>
-          <User profile={currentUser} setCurrentUser={setCurrentUser} />
+          <User
+            profile={currentUser}
+            setCurrentUser={setCurrentUser}
+            setNameWithTagLine={setNameWithTagLine}
+          />
         </>
       ) : (
         <></>
