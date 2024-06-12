@@ -8,7 +8,7 @@ import PageUsers from "./model/PageUsers.js";
 //import fetchSummonerData from './fetchSummonerData.js';
 
 const apiKey = "RGAPI-84164413-2716-4384-a95c-4974fc47c927";
- 
+
 const app = express();
 mongoose.connect(mongooseConnect);
 app.use(express.json());
@@ -55,17 +55,51 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.post("/api/change-password", async (req, res) => {
+  const { username, newPassword } = req.body;
+
+  try {
+    const user = await PageUsers.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+app.delete("/api/delete-profile", async (req, res) => {
+  const { username } = req.body;
+
+  try {
+    const user = await PageUsers.findOneAndDelete({ username });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Profile deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 app.get("/api/users", async (req, res) => {
   const name = req.query.name;
   const tagLine = req.query.tagLine;
-  if(name.length < 3 || tagLine.length < 3) {
-    res.status(400).json({message : "short name"})
+  if (name.length < 3 || tagLine.length < 3) {
+    res.status(400).json({ message: "short name" });
     return;
   }
 
-  const userFromDB = await Users.findOne({gameName: name, tagLine})
+  const userFromDB = await Users.findOne({ gameName: name, tagLine });
 
-  if (userFromDB){
+  if (userFromDB) {
     res.json(userFromDB);
     return;
   }
@@ -89,7 +123,7 @@ app.get("/api/users", async (req, res) => {
   const summonerId = fetchResponse.id;
   const profileIconId = fetchResponse.profileIconId;
   const summonerLevel = fetchResponse.summonerLevel;
-  const accountId = fetchResponse.accountId
+  const accountId = fetchResponse.accountId;
   const profileData = {
     accountId,
     summonerId,
@@ -97,46 +131,58 @@ app.get("/api/users", async (req, res) => {
     summonerLevel,
     gameName: name,
     tagLine: tagLine,
-    puuid: puuid
+    puuid: puuid,
   };
 
-  const fetchRankedData = await fetch(`https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${apiKey}`);
+  const fetchRankedData = await fetch(
+    `https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${apiKey}`
+  );
   const rankedDataAll = await fetchRankedData.json();
-  const soloRanked = rankedDataAll.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5")
-  const profile = {...profileData, ...soloRanked}
-  const user = await Users.create(profile)
+  const soloRanked = rankedDataAll.find(
+    (ranked) => ranked.queueType === "RANKED_SOLO_5x5"
+  );
+  const profile = { ...profileData, ...soloRanked };
+  const user = await Users.create(profile);
 
   res.json(user);
 });
 
-app.get("/api/updateUserDB/:id", async (req,res) =>{
-  const id = req.params.id
-  const additionalIDs = await Users.findOne({_id: id})
+app.get("/api/updateUserDB/:id", async (req, res) => {
+  const id = req.params.id;
+  const additionalIDs = await Users.findOne({ _id: id });
 
-  const summonerId = additionalIDs.summonerId
-  const puuid = additionalIDs.puuid
+  const summonerId = additionalIDs.summonerId;
+  const puuid = additionalIDs.puuid;
   const [profileResponse, rankedResponse] = await Promise.all([
-    fetch(`https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${apiKey}`),
-    fetch(`https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${apiKey}`)
-  ])
-  if(profileResponse.status != 200){
-    console.log("profileResponse", await profileResponse.text())
+    fetch(
+      `https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${apiKey}`
+    ),
+    fetch(
+      `https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${apiKey}`
+    ),
+  ]);
+  if (profileResponse.status != 200) {
+    console.log("profileResponse", await profileResponse.text());
     res.status(500).end();
-    return
+    return;
   }
-  if(rankedResponse.status != 200){
-    console.log("rankedResponse", await rankedResponse.text())
+  if (rankedResponse.status != 200) {
+    console.log("rankedResponse", await rankedResponse.text());
     res.status(500).end();
-    return
+    return;
   }
-  const update = await profileResponse.json()
-  const rankedData = await rankedResponse.json()
-  const soloRanked = rankedData.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5")
-  if(soloRanked) Object.assign(update, soloRanked);
+  const update = await profileResponse.json();
+  const rankedData = await rankedResponse.json();
+  const soloRanked = rankedData.find(
+    (ranked) => ranked.queueType === "RANKED_SOLO_5x5"
+  );
+  if (soloRanked) Object.assign(update, soloRanked);
 
-  const updatedUser = await Users.findOneAndUpdate({_id:id}, update, {new: true})
-  
-  res.json(updatedUser)
+  const updatedUser = await Users.findOneAndUpdate({ _id: id }, update, {
+    new: true,
+  });
+
+  res.json(updatedUser);
 });
 
 app.post("/api/matches", async (req, res) => {
@@ -145,23 +191,27 @@ app.post("/api/matches", async (req, res) => {
     `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=3&api_key=${apiKey}`
   );
   const matchList = await matchResponse.json();
-  console.log(matchList)
-  
-  const matchData = await Promise.all(
-    matchList.map((matchId) => fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}`)));
+  console.log(matchList);
 
-  const matches = []
+  const matchData = await Promise.all(
+    matchList.map((matchId) =>
+      fetch(
+        `https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}`
+      )
+    )
+  );
+
+  const matches = [];
 
   for (let match of matchData) {
     const jsonMatch = await match.json();
-    matches.push(jsonMatch)
+    matches.push(jsonMatch);
   }
-  console.log(matches)
+  console.log(matches);
   res.json(matches);
 });
 
 app.get("/api/usersearch/:gameName", async (req, res) => {
-  
   if (
     req.params.gameName.length > 2 &&
     req.params.gameName !== null &&
@@ -179,7 +229,7 @@ app.get("/api/usersearch/:gameName", async (req, res) => {
         $sort: { gameNameLength: 1 },
       },
       {
-        $addFields: { gameNameLength: "$$REMOVE"},
+        $addFields: { gameNameLength: "$$REMOVE" },
       },
       {
         $limit: 5,
