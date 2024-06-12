@@ -228,21 +228,14 @@ input,
   align-items: center;
 }
 
-/* .autoCompletebgrnd{
-  display: flex;
-  position: relative;
-  z-index: 1;
-  background-color: black;
-  
-  justify-content: center;
-  align-items: end;
-} */
 
 #searchAutoComplete {
 background-color: #27344eee;
   position: absolute; /* Stay in place */
-  margin-left: -7%;
+  margin-left: -5.5%;
+  width: 150px;
   z-index: 1;
+  cursor: pointer;
 }
 
 .currentPlayer img{

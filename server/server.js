@@ -67,14 +67,14 @@ app.post("/api/change-password", async (req, res) => {
 
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch){
-      return res.status(400).json({message: "ur memory is sh*t"})
+      return res.status(400).json({message: "Wrong pw"})
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
     await user.save();
 
-    res.status(200).json({ message: "ok. u changed morron hope u forget it in 5sxd" });
+    res.status(200).json({ message: "pw changed" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
@@ -83,9 +83,7 @@ app.post("/api/change-password", async (req, res) => {
 app.put('/api/favoritePlayers/:username', async(req, res) => {
   try {
     const username = req.params.username
-    console.log(username)
     const {favoritePlayerId} = req.body;
-    console.log(favoritePlayerId)
     const updatedUser = await PageUsers.findOneAndUpdate(
       {username: username},
       {$addToSet: {favoritePlayers: favoritePlayerId}},
@@ -112,7 +110,6 @@ app.get('/api/favoritePlayers/:username', async (req, res) => {
 
 app.delete('/api/favoritePlayers/:username/:favoriteId', async (req, res) => {
   const {username, favoriteId} = req.params;
-  console.log('username',username , 'favoriteId', favoriteId);
 
   try {
     const user = await PageUsers.findOne({username: username});
@@ -123,7 +120,7 @@ app.delete('/api/favoritePlayers/:username/:favoriteId', async (req, res) => {
     user.favoritePlayers = user.favoritePlayers.filter(player => player._id.toString() !== favoriteId);
     await user.save()
 
-    res.status(200).json({message: 'kitorolve mint a feneked'})
+    res.status(200).json({message: 'Deleted'})
   } catch (error) {
     res.status(500).json({message: 'Server error'})
   }
@@ -241,7 +238,7 @@ app.get("/api/updateUserDB/:id", async (req, res) => {
 app.post("/api/matches", async (req, res) => {
   const puuid = req.body.puuid;
   const matchResponse = await fetch(
-    `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=3&api_key=${apiKey}`
+    `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=5&api_key=${apiKey}`
   );
   const matchList = await matchResponse.json();
 

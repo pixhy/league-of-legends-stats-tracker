@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import MatchHistory from './MatchHistory';
-import { useOutletContext } from 'react-router-dom';
-
 
 const User = ({ setCurrentUser, profile, setNameWithTagLine }) => {
   const userName = localStorage.getItem("username")
@@ -9,10 +7,6 @@ const User = ({ setCurrentUser, profile, setNameWithTagLine }) => {
   const [matchHistory, setMatchHistory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [addFavorite, setAddFavorite] = useState(false);
-  console.log("profile.gameName",profile.gameName)
-  //const [currentUser, setCurrentUser] = useOutletContext()
-  //console.log("selectedUser", selectedUser)
-
 
 
   useEffect(() => {

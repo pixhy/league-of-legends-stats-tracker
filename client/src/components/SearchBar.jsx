@@ -9,7 +9,6 @@ const SearchBar = ({ setCurrentUser, setNameWithTagLine }) => {
 
   useEffect(() => {
     async function fetchUserFromDB() {
-      console.log("fetchUserFromDB", searchInput);
       try {
         const response = await fetch(`/api/usersearch/${searchInput}`);
         if (response.status === 404) {
@@ -45,12 +44,10 @@ const SearchBar = ({ setCurrentUser, setNameWithTagLine }) => {
   };
 
   function separateUserNameAndTag(name) {
-    console.log("separateUserNameAndTag", name);
     if (name.includes('#')) {
       let gameName = name.split('#')[0];
       let tagLine = name.split('#')[1].toLowerCase();
       if(gameName.length<=16 && gameName.length>2 && tagLine.length<=5 && tagLine.length>2){
-        console.log("setNameWithTagLine call")
         setNameWithTagLine({name: gameName, tagLine: tagLine});
         navigate(`/summoners/eune/${gameName}/${tagLine}`);;
       }

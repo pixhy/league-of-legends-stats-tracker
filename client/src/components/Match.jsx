@@ -3,7 +3,6 @@ import Loading from './Loading/Loading';
 import { useNavigate } from "react-router-dom"
 
 const Match = ({ match, profile, loading, setNameWithTagLine }) => {
-  //const [isOpen, setIsOpen] = useState(false)
   const navigate = useNavigate();
 
   const team1 = match.info.participants.filter((player) => player.teamId === 100);

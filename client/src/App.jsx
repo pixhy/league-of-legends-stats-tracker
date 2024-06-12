@@ -14,15 +14,12 @@ useEffect(() => {
 }, [])
 
 useEffect(() => {
-  console.log("nameWithTagLine", nameWithTagLine);
   async function fetchUserFromLiveServer() {
-    console.log("fetchUserFromLiveServer");
     try {
       const response = await fetch(
         `/api/users/?name=${nameWithTagLine.name}&tagLine=${nameWithTagLine.tagLine}`
       );
       const user = await response.json();
-      console.log("user", user);
       if (response.status === 404) {
         console.log("404 error");
       } else if (response.status === 200) {

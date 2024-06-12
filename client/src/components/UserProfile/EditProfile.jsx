@@ -16,7 +16,7 @@ const resp = await fetch('/api/change-password', {
   })
 });
 if (resp.ok){
-  alert('ok. u changed morron hope u forget it in 5sxd')
+  alert('Password successfully changed 🫡')
   setCurrentPassword('');
   setNewPassword('');
 }else {
