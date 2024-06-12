@@ -13,7 +13,7 @@ const UserProfile = () => {
         <Link to="user-favorites" className="link-buttons">
           <button>Favorites</button>
         </Link>
-        <Link to="edit" className='link-button'>
+        <Link to="edit" className='link-buttons'>
           <button>Edit profile</button>
         </Link>
       </div>

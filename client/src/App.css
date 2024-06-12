@@ -1,18 +1,20 @@
-
 body {
   background-color: rgb(1, 0, 16);
   color: whitesmoke;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
+
 div.searchContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 img.banner {
   border-radius: 10px;
 }
+
 form {
   background-color: rgb(35, 35, 35);
   border-radius: 10px;
@@ -34,7 +36,6 @@ input,
 .oneMatch {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
 }
 
 .individualTeam {
@@ -103,6 +104,7 @@ input,
   background-color: #59343b;
   border: 1px solid #813846;
 }
+
 .searchedPlayer {
   background-color: #0c7e08;
 }
@@ -112,27 +114,39 @@ input,
   display: flex;
   justify-content: center;
 }
+
 .modal {
-  display: flex; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: flex;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
 }
 
 .modal-content {
-  background-color: #fefefe;
+  background-color: rgb(35, 35, 35);
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
+  width: 80%;
+  /* Could be more or less, depending on screen size */
   max-width: 500px;
   border-radius: 8px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
@@ -168,30 +182,30 @@ input,
 
 
 .modal {
-  display: flex; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: flex;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0, 0, 0); /* Fallback color */
-  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
 }
 
-.modal-content {
-  background-color: #fefefe;
-  margin: auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%; /* Could be more or less, depending on screen size */
-  max-width: 500px;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
 
 .close {
   color: #aaa;
@@ -230,46 +244,47 @@ input,
 
 
 #searchAutoComplete {
-background-color: #27344eee;
-  position: absolute; /* Stay in place */
+  background-color: #27344eee;
+  position: absolute;
+  /* Stay in place */
   margin-left: -5.5%;
   width: 150px;
   z-index: 1;
   cursor: pointer;
 }
 
-.currentPlayer img{
+.currentPlayer img {
   width: 48px;
 }
 
-.summonerSpells img, .items img{
+.summonerSpells img,
+.items img {
   width: 22px;
 }
 
-.theMatch{
+.theMatch {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
-  height: 185px;
+  margin-bottom: 20px;
 }
 
-.currentPlayer{
+.currentPlayer {
   padding: 20px;
-  background-color: rgb(3, 0, 39);
+  background-color: rgb(19, 14, 85)
 }
 
 .matchResult {
   width: 70px;
   padding-top: 60px;
   padding-left: 25px;
-  background-color: rgb(3, 0, 39);
+  background-color: rgb(19, 14, 85)
 }
 
-.currPlayer{
+.currPlayer {
   background-color: green;
 }
 
-button{
+button {
   border: 1px;
   padding: 12px 25px;
   background-color: rgb(88, 88, 88);
@@ -277,22 +292,25 @@ button{
   border-radius: 5%;
   font-size: 15px;
   margin-right: 5px;
+
 }
 
-button:hover{
+button:hover {
   background-color: rgb(145, 143, 143);
+  cursor: pointer;
 }
 
-#refreshButton{
+#refreshButton {
   margin-left: 50px;
 }
 
-.favourite{
+.favourite {
   border-color: var(--gray250);
   background-color: rgb(145, 143, 143, 0);
- 
+
 }
-.favUser{
+
+.favUser {
   display: flex;
   align-items: center;
   border: 2px solid white;
@@ -301,10 +319,11 @@ button:hover{
   border-radius: 3px;
 }
 
-.favUser img{
+.favUser img {
   width: 50px;
 }
-li{
+
+li {
   list-style-type: none;
   display: flex;
   align-items: center;
@@ -319,9 +338,4 @@ li{
 .link-buttons {
   text-decoration: none;
   color: white;
-}
-
-.link-buttons:hover{
-  background-color: rgb(145, 143, 143);
-  cursor: pointer;
 }
