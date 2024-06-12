@@ -9,16 +9,29 @@ function App() {
   const [currentUser, setCurrentUser] = useState(null);
 
   const [nameWithTagLine, setNameWithTagLine] = useState({name: "", tagLine: ""});
+
+
+
   const [error, setError] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [logged, setLogged] = useState(false);
   const [username, setUsername] = useState(""); 
 
+useEffect(()=>{
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  const storedUsername = localStorage.getItem('username');
+  if (isLoggedIn && storedUsername){
+    setLogged(true);
+    setUsername(storedUsername);
+  }
+}, []);
 
   const handleLoginClick = () => {
     if (logged) {
       setLogged(false);
       setUsername("");
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('username')
     } else {
       setShowLogin(true);
     }
@@ -86,7 +99,7 @@ function App() {
       </div>
       {!error && currentUser ? (
         <>
-          <User profile={currentUser} setCurrentUser={setCurrentUser}/>
+          <User profile={currentUser} setCurrentUser={setCurrentUser} setNameWithTagLine={setNameWithTagLine}/>
         </>
       ) : (<></>)}
     </>

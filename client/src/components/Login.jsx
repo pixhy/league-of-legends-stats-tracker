@@ -44,6 +44,8 @@ export default function Login({ setShowLogin, setLogged, setUsername }) {
       });
       const result = await response.json();
       if (response.ok) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem("username",data.username);
         setShowLogin(false);
         setLogged(true);
         setUsername(data.username);
@@ -78,6 +80,8 @@ export default function Login({ setShowLogin, setLogged, setUsername }) {
       });
       const result = await response.json();
       if (response.ok) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', newUserData.username);
         setShowLogin(false);
         setLogged(true);
         setUsername(newUserData.username);
@@ -91,6 +95,7 @@ export default function Login({ setShowLogin, setLogged, setUsername }) {
       setErrorMessage("Server error, please try again later.");
     }
   };
+  
   return (
     <>
       <div className="App">

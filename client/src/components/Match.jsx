@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Loading from './Loading/Loading';
 
-const Match = ({ match, profile, loading }) => {
+const Match = ({ match, profile, loading, setNameWithTagLine }) => {
   const [isOpen, setIsOpen] = useState(false)
   //console.log("match", match)
   //console.log("profile", profile)
@@ -19,14 +19,9 @@ const Match = ({ match, profile, loading }) => {
 
   // console.log(history.participants)
 
-  // const onPlayerClickHandler = (e) => {
-  //   setSearchedUser(null)
-  //   states.setName(e.target.innerText);
-  //   states.setTagLine(e.target.classList[0].toLowerCase());
-  //   states.setRegion(e.target.classList[1]);
-
-  //   states.setSubmitted((prev) => !prev);
-  // };
+  const onPlayerClickHandler = (e) => {
+    setNameWithTagLine({name: e.target.innerText, tagLine: e.target.classList[0].toLowerCase()})
+  };
 
   if(loading || !userProfile) {
     return <Loading/>
@@ -65,7 +60,7 @@ const Match = ({ match, profile, loading }) => {
           <div className={`team1 individualTeam ${player.win ? 'playerWin' : 'playerLose'}`} key={player.riotIdGameName + match.matchId}>
             <div className={`matchContainer`}>
               <img src={`champion/${player.championName.toLowerCase()}.png`} alt="" />
-              <span className={`${player.riotIdTagline} ${player.region} player`}>
+              <span className={`${player.riotIdTagline} ${player.region} player`} onClick={onPlayerClickHandler}>
                 {player.riotIdGameName}
               </span>
             </div>
@@ -77,7 +72,7 @@ const Match = ({ match, profile, loading }) => {
           <div className={`team2 individualTeam ${player.win ? 'playerWin' : 'playerLose'}`} key={player.riotIdGameName + match.matchId}>
             <div className={`matchContainer`}>
               <img src={`champion/${player.championName.toLowerCase()}.png`} alt="" />
-              <span className={`${player.riotIdTagline} ${player.region} player`}>
+              <span className={`${player.riotIdTagline} ${player.region} player`} onClick={onPlayerClickHandler}>
                 {player.riotIdGameName}
               </span>
             </div>
