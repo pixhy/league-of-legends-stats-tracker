@@ -134,7 +134,8 @@ app.get("/api/updateUserDB/:id", async (req,res) =>{
   const soloRanked = rankedData.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5")
   if(soloRanked) Object.assign(update, soloRanked);
 
-  const updatedUser = await Users.findOneAndUpdate({_id:id}, update)
+  const updatedUser = await Users.findOneAndUpdate({_id:id}, update, {new: true})
+  
   res.json(updatedUser)
 });
 
