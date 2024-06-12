@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import User from './components/User';
 import Login from './components/Login';
+import { Link } from 'react-router-dom';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -26,6 +27,8 @@ function App() {
   const closeModal = () => {
     setShowLogin(false);
   };
+
+  
   useEffect(() => {
 
     async function fetchUserFromLiveServer() {
@@ -58,7 +61,8 @@ function App() {
         <button onClick={handleLoginClick}>
           {logged ? "Logout" : "Login"}
         </button>
-        {" "}{logged && <span>Welcome, {username}!</span>}
+        {" "}{logged && <span>Welcome, {username}! <Link to={"user-profile"}>Profile</Link></span>}
+        
       </div>
       {showLogin && (
         <div className="modal">
@@ -74,7 +78,12 @@ function App() {
           </div>
         </div>
       )}
+       <div className="banner">
+       <Link to="/" onClick={() => setCurrentUser(null)}>
+        <img src="banner.png"  alt="" />
+      </Link>
       <SearchBar setCurrentUser={setCurrentUser} setNameWithTagLine={setNameWithTagLine}  setError={setError}/>
+      </div>
       {!error && currentUser ? (
         <>
           <User profile={currentUser} setCurrentUser={setCurrentUser}/>
