@@ -109,6 +109,7 @@ export default function Login({ setShowLogin, setLogged, setUsername }) {
                 placeholder="Username"
                 required
                 onChange={newUserChangeHandler}
+                autoComplete="off"
               />
             </div>
             <div className="input-text">
@@ -145,6 +146,7 @@ export default function Login({ setShowLogin, setLogged, setUsername }) {
                 placeholder="Username"
                 required
                 onChange={changeHandler}
+                autoComplete="off"
               />
             </div>
             <div className="input-text">
