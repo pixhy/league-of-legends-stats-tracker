@@ -6,8 +6,7 @@ A MERN stack web application that displays statistics for League of Legends play
 
 # Demo Video
 
-
-https://github.com/user-attachments/assets/5e312826-d5c8-420c-bd44-bb6fea80d8ad
+https://github.com/user-attachments/assets/8ee89974-62b4-402e-a4d9-32eef83d5b92
 
 
 ## Table of Contents
