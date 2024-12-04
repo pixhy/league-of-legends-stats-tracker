@@ -4,10 +4,9 @@ import mongooseConnect from "./mongooseConnect.js";
 import Users from "./model/Users.js";
 import bcrypt from "bcrypt";
 import PageUsers from "./model/PageUsers.js";
+import 'dotenv/config';
 
-//import fetchSummonerData from './fetchSummonerData.js';
-
-const apiKey = "RGAPI-a9294a10-16ff-445e-bafe-a523aca2b08a";
+const apiKey = process.env.API_KEY;
  
 const app = express();
 mongoose.connect(mongooseConnect);
