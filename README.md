@@ -1,120 +1,109 @@
-DAY 1:
+# League of Legends Stats Tracker
 
-Figma: https://www.figma.com/board/yL4VuDH0xiv2H8WgDcI0re/lol-site?node-id=0-1&t=8oKvD91fzMtGhp3d-1
-Github project: https://github.com/orgs/CodecoolGlobal/projects/119/
+A MERN stack web application that displays statistics for League of Legends players. Users can view player stats and performance data in an intuitive interface. Built with a simple CSS design for clean and user-friendly interaction.
 
-DAY 2: 
+---
 
-Building database - fetching playerbase by rank (will take approx. 7 days): 
-20 fetch / 1 sec
-Iron 4: 16 page
-Iron 3: 37 page
-Iron 2: 101 page
-Iron 1: 101 page
-
-Bronze 4: 177 page
-Bronze 3: 139 page
-Bronze 2: 139 page
-Bronze 1: 89 page
-
-Silver 4: 152 page
-Silver 3: 111 page
-Silver 2: 103 page
-Silver 1: 69 page
-
-Gold 4: 140 page
-Gold 3: 92 page
-Gold 2: 75 page
-Gold 1: 56 page
-
-Plat 4: 134 page
-Plat 3: 106 page
-Plat 2: 111 page
-Plat 1: 71 page
-
-Emerald 4: 125 page
-Emerald 3: 70 page
-Emerald 2: 52 page
-Emerald 1: 30 page
-
-Dia 4: 49 page
-Dia 3: 31 page
-Dia 2: 21 page
-Dia 1: 10 page
-
-total page sum 2268
-ranked playerbase: 501 073
+# Demo Video
 
 
-DAY 3:
+https://github.com/user-attachments/assets/5e312826-d5c8-420c-bd44-bb6fea80d8ad
 
-gather neccessary match data :
 
-info.gameDuration
-info.gameCreation
-info.gameMode
+## Table of Contents
+- [Features](#features)
+- [Technologies](#technologies)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributors](#contributors)
 
-info.participants[
-  {
-    championName
-    individualPosition
-    item0
-    item1
-    item2
-    item3
-    item4
-    item5
-    item6
-    kills
-    assists
-    deaths
-    summonerLevel
-    riotIdGameName
-    riotIdTagline
-    visionScore
-    damageDealtToBuildings
-    damageDealtToObjectives
-    damageDealtToTurrets
-    damageSelfMitigated
+---
 
-    goldEarned
+## Features
+- Search for League of Legends player statistics.
+- Simple and clean user interface using vanilla CSS.
+- Interactive and responsive experience powered by the MERN stack.
 
-    magicDamageDealt
-    magicDamageDealtToChampions
-    magicDamageTaken
+---
 
-    physicalDamageDealt
-    physicalDamageDealtToChampions
-    physicalDamageTaken
+## Technologies
+- **Frontend**: React.js, CSS
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Miscellaneous**: dotenv (for environment variables)
 
-    profileIcon
+---
 
-    totalDamageDealt
-    totalDamageDealtToChampions
-    totalDamageShieldedOnTeammates
-    totalDamageTaken
+## Installation
 
-    Summoner spells:
-    summoner1Id
-    summoner2Id
+### Prerequisites
+Make sure you have the following installed:
+- [Node.js](https://nodejs.org/)
+- [MongoDB](https://www.mongodb.com/)
 
-    100 or 200 (100 = blue side, 200 = red side)
-    teamId
+### Steps
+1. **Clone the repository**:
+ ```bash
+ git clone https://github.com/CodecoolGlobal/freestyle-mern-project-react-pixhy
+ cd freestyle-mern-project-react-pixhy
+ ```
 
-    champLevel
-    championId
-    championName
+2. **Install dependencies for both client and server**:
 
-    win
-  }
-]
+- Navigate to the client folder:
+```bash
+   cd client
+   npm install
+```
+- Navigate to the server folder:
+```bash
+   cd ../server
+   npm install
+```
+3. **Set up environment variables**:
+- Create a .env file in the server directory.
+- Add the following:
+  API_KEY=your-api-key-for-data-fetching
 
-teams[
-  baron.kills
-  champion.kills
-  dragon.kills
-  horde.kills
-  inhibitor.kills
-  riftHerald.kills
-  win
-]
+
+  **Notes on Riot API**
+
+- The Riot API provides the data for League of Legends player statistics.
+- Keep in mind that the API key is rate-limited. For production use, apply for a production API key with higher limits on the Riot Developer Portal.
+
+
+- Create mongoConnect.js in the server directory.
+- Add the following:
+ ```
+  let mongooseConnect = your-mongodb-connection-string
+  export default mongooseConnect;
+  ``` 
+# Usage
+## Start the Application
+1. **Run the client**: 
+   ```bash
+   cd client
+   npm run dev
+   ```
+
+2. **Run the server**:
+   ```bash
+   cd server
+   node server.js
+   ```
+3. Open your browser and navigate to: `http://localhost:5173/`
+
+
+---
+
+## Contributors
+This project is made possible thanks to the following contributors:
+
+| Name           | LinkedIn                                          | GitHub                                 |
+|----------------|---------------------------------------------------|----------------------------------------|
+| Tünde Bak      | [LinkedIn](https://www.linkedin.com/in/tunde-bak) | [GitHub](https://github.com/pixhy)     |
+| Péter Právics  | [LinkedIn](https://www.linkedin.com/in/pr%C3%A1vics-p%C3%A9ter-760265330/) | [GitHub](https://github.com/prvics) |
+| Kristóf Nyikes | [LinkedIn](https://www.linkedin.com/in/krist%C3%B3f-nyikes-31121133a/) | [GitHub](https://github.com/kristofNyikes) |
+
+Feel free to connect with us on LinkedIn or check out our other projects on GitHub!
+
