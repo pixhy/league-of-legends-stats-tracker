@@ -21,12 +21,11 @@ async function fetchRiotAPI(region, endpoint, params='') {
   const response = await fetch(url);
   if(response.status == 429){
     let retrySeconds = Number(response.headers.get('retry-after'));
-    console.log("várunk " + retrySeconds + " másodpercet");
+    console.log("rate limit exceeded, retry in " + retrySeconds + " second(s)");
     await sleep(retrySeconds * 1000);
     return await fetchRiotAPI(region, endpoint, params);
   }
   if(response.status == 503){
-    console.log("riot szerver lekotlott");
     await sleep(5000);
     return await fetchRiotAPI(region, endpoint, params);
   }
@@ -34,7 +33,7 @@ async function fetchRiotAPI(region, endpoint, params='') {
     console.log(url);
     console.log(response.status);
     console.log(response.headers);
-    throw "aaaaaaaaaaaaa";
+    throw "Error while fetching from Riot API";
   }
   return await response.json();
 }
