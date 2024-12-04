@@ -44,8 +44,8 @@ Make sure you have the following installed:
 ### Steps
 1. **Clone the repository**:
  ```bash
- git clone https://github.com/CodecoolGlobal/freestyle-mern-project-react-pixhy
- cd freestyle-mern-project-react-pixhy
+ git clone https://github.com/pixhy/league-of-legends-stats-tracker
+ cd league-of-legends-stats-tracker
  ```
 
 2. **Install dependencies for both client and server**:
