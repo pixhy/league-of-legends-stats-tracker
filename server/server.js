@@ -13,6 +13,33 @@ const app = express();
 mongoose.connect(mongooseConnect);
 app.use(express.json());
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function fetchRiotAPI(region, endpoint, params='') {
+  const url = `https://${region}.api.riotgames.com${endpoint}?api_key=${apiKey}&${params}`;
+  const response = await fetch(url);
+  if(response.status == 429){
+    let retrySeconds = Number(response.headers.get('retry-after'));
+    console.log("várunk " + retrySeconds + " másodpercet");
+    await sleep(retrySeconds * 1000);
+    return await fetchRiotAPI(region, endpoint, params);
+  }
+  if(response.status == 503){
+    console.log("riot szerver lekotlott");
+    await sleep(5000);
+    return await fetchRiotAPI(region, endpoint, params);
+  }
+  if(response.status != 200 && response.status != 404){
+    console.log(url);
+    console.log(response.status);
+    console.log(response.headers);
+    throw "aaaaaaaaaaaaa";
+  }
+  return await response.json();
+}
+
 app.post("/api/register", async (req, res) => {
   const { username, password } = req.body;
 
@@ -156,21 +183,15 @@ app.get("/api/users", async (req, res) => {
     return;
   }
 
-  const response = await fetch(
-    `https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${name}/${tagLine}?api_key=${apiKey}`
-  );
-  const data = await response.json();
+  const data = await fetchRiotAPI('europe', `/riot/account/v1/accounts/by-riot-id/${name}/${tagLine}`);
 
-  if (response.status === 404) {
+  if (data.status && data.status_code === 404) {
     res.status(404).json({ message: "No such user" });
     return;
   }
   const puuid = data.puuid;
 
-  const fetchSummonerId = await fetch(
-    `https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${apiKey}`
-  );
-  const fetchResponse = await fetchSummonerId.json();
+  const fetchResponse = await fetchRiotAPI('eun1', `/lol/summoner/v4/summoners/by-puuid/${puuid}`);
 
   const summonerId = fetchResponse.id;
   const profileIconId = fetchResponse.profileIconId;
@@ -186,10 +207,8 @@ app.get("/api/users", async (req, res) => {
     puuid: puuid,
   };
 
-  const fetchRankedData = await fetch(
-    `https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${apiKey}`
-  );
-  const rankedDataAll = await fetchRankedData.json();
+  const rankedDataAll = await fetchRiotAPI('eun1', `/lol/league/v4/entries/by-summoner/${summonerId}`);
+  
   const soloRanked = rankedDataAll.find(
     (ranked) => ranked.queueType === "RANKED_SOLO_5x5"
   );
@@ -205,56 +224,43 @@ app.get("/api/updateUserDB/:id", async (req, res) => {
 
   const summonerId = additionalIDs.summonerId;
   const puuid = additionalIDs.puuid;
-  const [profileResponse, rankedResponse] = await Promise.all([
-    fetch(
-      `https://eun1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}?api_key=${apiKey}`
-    ),
-    fetch(
-      `https://eun1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}?api_key=${apiKey}`
-    ),
+
+  const [update, rankedData] = await Promise.all([
+    fetchRiotAPI('eun1', `/lol/summoner/v4/summoners/by-puuid/${puuid}`),
+    fetchRiotAPI('eun1', `/lol/league/v4/entries/by-summoner/${summonerId}`),
   ]);
-  if (profileResponse.status != 200) {
+  if (update.status && update.status.status_code != 200) {
     res.status(500).end();
     return;
   }
-  if (rankedResponse.status != 200) {
+  if (rankedData.status && rankedData.status.status_code != 200) {
     res.status(500).end();
     return;
   }
-  const update = await profileResponse.json();
-  const rankedData = await rankedResponse.json();
-  const soloRanked = rankedData.find(
-    (ranked) => ranked.queueType === "RANKED_SOLO_5x5"
-  );
+  const soloRanked = rankedData.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5");
+  
   if (soloRanked) Object.assign(update, soloRanked);
 
   const updatedUser = await Users.findOneAndUpdate({ _id: id }, update, {
     new: true,
   });
-
   res.json(updatedUser);
 });
 
 app.post("/api/matches", async (req, res) => {
   const puuid = req.body.puuid;
-  const matchResponse = await fetch(
-    `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?start=0&count=5&api_key=${apiKey}`
-  );
-  const matchList = await matchResponse.json();
+  const matchList = await fetchRiotAPI('europe', `/lol/match/v5/matches/by-puuid/${puuid}/ids`, 'start=0&count=5');
 
   const matchData = await Promise.all(
     matchList.map((matchId) =>
-      fetch(
-        `https://europe.api.riotgames.com/lol/match/v5/matches/${matchId}?api_key=${apiKey}`
-      )
+      fetchRiotAPI('europe', `/lol/match/v5/matches/${matchId}`)
     )
   );
 
   const matches = [];
 
   for (let match of matchData) {
-    const jsonMatch = await match.json();
-    matches.push(jsonMatch);
+    matches.push(match);
   }
   res.json(matches);
 });
