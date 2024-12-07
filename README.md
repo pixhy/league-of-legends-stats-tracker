@@ -65,10 +65,14 @@ Make sure you have the following installed:
   API_KEY=your-api-key-for-data-fetching
 
 
-  **Notes on Riot API**
-
-- The Riot API provides the data for League of Legends player statistics.
-- Keep in mind that the API key is rate-limited. For production use, apply for a production API key with higher limits on the Riot Developer Portal.
+#### Notes on Riot API
+  
+  You can get your API key on the [Riot Games developer portal](https://developer.riotgames.com/) with a Riot account.
+  
+  The Riot API provides the data for League of Legends player statistics.
+  
+  Keep in mind that the API key is rate-limited. For production use, apply for a production API key with higher limits on the Riot Developer Portal.
+  
 
 
 - Create mongoConnect.js in the server directory.
