@@ -1,35 +1,36 @@
 import express from "express";
 import mongoose from "mongoose";
-import mongooseConnect from "./mongooseConnect.js";
 import Users from "./model/Users.js";
-import bcrypt from "bcrypt";
 import PageUsers from "./model/PageUsers.js";
-import 'dotenv/config';
+import "dotenv/config";
+import sleep from "./utils/sleep.js";
+import { hashPassword, comparePassword } from "./utils/hash.js";
 
+const PORT = process.env.PORT || 3000;
 const apiKey = process.env.API_KEY;
- 
+const mongoURI =
+  process.env.NODE_ENV === "test"
+    ? process.env.MONGODB_URI_TEST
+    : process.env.MONGODB_URI_PROD;
+
 const app = express();
-mongoose.connect(mongooseConnect);
+mongoose.connect(mongoURI);
 app.use(express.json());
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function fetchRiotAPI(region, endpoint, params='') {
+async function fetchRiotAPI(region, endpoint, params = "") {
   const url = `https://${region}.api.riotgames.com${endpoint}?api_key=${apiKey}&${params}`;
   const response = await fetch(url);
-  if(response.status == 429){
-    let retrySeconds = Number(response.headers.get('retry-after'));
+  if (response.status == 429) {
+    let retrySeconds = Number(response.headers.get("retry-after"));
     console.log("rate limit exceeded, retry in " + retrySeconds + " second(s)");
     await sleep(retrySeconds * 1000);
     return await fetchRiotAPI(region, endpoint, params);
   }
-  if(response.status == 503){
+  if (response.status == 503) {
     await sleep(5000);
     return await fetchRiotAPI(region, endpoint, params);
   }
-  if(response.status != 200 && response.status != 404){
+  if (response.status != 200 && response.status != 404) {
     console.log(url);
     console.log(response.status);
     console.log(response.headers);
@@ -47,7 +48,7 @@ app.post("/api/register", async (req, res) => {
       return res.status(400).json({ message: "Username already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
     const newUser = new PageUsers({
       username,
       password: hashedPassword,
@@ -69,7 +70,7 @@ app.post("/api/login", async (req, res) => {
       return res.status(400).json({ message: "Wrong password or username" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await comparePassword(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Wrong password or username" });
     }
@@ -81,7 +82,7 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/change-password", async (req, res) => {
-  const { username, currentPassword ,newPassword } = req.body;
+  const { username, currentPassword, newPassword } = req.body;
 
   try {
     const user = await PageUsers.findOne({ username });
@@ -89,67 +90,68 @@ app.post("/api/change-password", async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
 
-
-    const isMatch = await bcrypt.compare(currentPassword, user.password);
-    if (!isMatch){
-      return res.status(400).json({message: "Wrong pw"})
+    const isMatch = await comparePassword(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Wrong password" });
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const hashedPassword = await hashPassword(newPassword);
     user.password = hashedPassword;
     await user.save();
 
-    res.status(200).json({ message: "pw changed" });
+    res.status(200).json({ message: "Password changed" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 });
 
-app.put('/api/favoritePlayers/:username', async(req, res) => {
+app.put("/api/favoritePlayers/:username", async (req, res) => {
   try {
-    const username = req.params.username
-    const {favoritePlayerId} = req.body;
+    const username = req.params.username;
+    const { favoritePlayerId } = req.body;
     const updatedUser = await PageUsers.findOneAndUpdate(
-      {username: username},
-      {$addToSet: {favoritePlayers: favoritePlayerId}},
-      {new: true, useFindAndModify: false}
+      { username: username },
+      { $addToSet: { favoritePlayers: favoritePlayerId } },
+      { new: true, useFindAndModify: false }
     );
     res.json(updatedUser);
-  } catch (error) {
-    
-  }
-})
+  } catch (error) {}
+});
 
-app.get('/api/favoritePlayers/:username', async (req, res) => {
+app.get("/api/favoritePlayers/:username", async (req, res) => {
   try {
-    const username = req.params.username
-    const user = await PageUsers.findOne({username : username}).populate("favoritePlayers").exec()
+    const username = req.params.username;
+    const user = await PageUsers.findOne({ username: username })
+      .populate("favoritePlayers")
+      .exec();
     if (!user) {
-      res.status(404).json({message: "User not found"})
+      res.status(404).json({ message: "User not found" });
     }
-    res.json(user.favoritePlayers)
+    res.json(user.favoritePlayers);
   } catch (error) {
-    res.status(500).json({message: "Server error"})
+    res.status(500).json({ message: "Server error" });
   }
-})
+});
 
-app.delete('/api/favoritePlayers/:username/:favoriteId', async (req, res) => {
-  const {username, favoriteId} = req.params;
+app.delete("/api/favoritePlayers/:username/:favoriteId", async (req, res) => {
+  const { username, favoriteId } = req.params;
 
   try {
-    const user = await PageUsers.findOne({username: username});
-    if(!user){
-      return res.status(400).json({message: "no user found"})
+    const user = await PageUsers.findOne({ username: username });
+    if (!user) {
+      return res.status(400).json({ message: "No user found" });
     }
 
-    user.favoritePlayers = user.favoritePlayers.filter(player => player._id.toString() !== favoriteId);
-    await user.save()
+    user.favoritePlayers = user.favoritePlayers.filter(
+      (player) => player._id.toString() !== favoriteId
+    );
+    await user.save();
 
-    res.status(200).json({message: 'Deleted'})
+    res.status(200).json({ message: "Deleted" });
   } catch (error) {
-    res.status(500).json({message: 'Server error'})
+    res.status(500).json({ message: "Server error" });
   }
-})
+});
 
 app.delete("/api/delete-profile", async (req, res) => {
   const { username } = req.body;
@@ -181,7 +183,10 @@ app.get("/api/users", async (req, res) => {
     return;
   }
 
-  const data = await fetchRiotAPI('europe', `/riot/account/v1/accounts/by-riot-id/${name}/${tagLine}`);
+  const data = await fetchRiotAPI(
+    "europe",
+    `/riot/account/v1/accounts/by-riot-id/${name}/${tagLine}`
+  );
 
   if (data.status && data.status_code === 404) {
     res.status(404).json({ message: "No such user" });
@@ -189,7 +194,10 @@ app.get("/api/users", async (req, res) => {
   }
   const puuid = data.puuid;
 
-  const fetchResponse = await fetchRiotAPI('eun1', `/lol/summoner/v4/summoners/by-puuid/${puuid}`);
+  const fetchResponse = await fetchRiotAPI(
+    "eun1",
+    `/lol/summoner/v4/summoners/by-puuid/${puuid}`
+  );
 
   const summonerId = fetchResponse.id;
   const profileIconId = fetchResponse.profileIconId;
@@ -205,8 +213,11 @@ app.get("/api/users", async (req, res) => {
     puuid: puuid,
   };
 
-  const rankedDataAll = await fetchRiotAPI('eun1', `/lol/league/v4/entries/by-summoner/${summonerId}`);
-  
+  const rankedDataAll = await fetchRiotAPI(
+    "eun1",
+    `/lol/league/v4/entries/by-summoner/${summonerId}`
+  );
+
   const soloRanked = rankedDataAll.find(
     (ranked) => ranked.queueType === "RANKED_SOLO_5x5"
   );
@@ -224,8 +235,8 @@ app.get("/api/updateUserDB/:id", async (req, res) => {
   const puuid = additionalIDs.puuid;
 
   const [update, rankedData] = await Promise.all([
-    fetchRiotAPI('eun1', `/lol/summoner/v4/summoners/by-puuid/${puuid}`),
-    fetchRiotAPI('eun1', `/lol/league/v4/entries/by-summoner/${summonerId}`),
+    fetchRiotAPI("eun1", `/lol/summoner/v4/summoners/by-puuid/${puuid}`),
+    fetchRiotAPI("eun1", `/lol/league/v4/entries/by-summoner/${summonerId}`),
   ]);
   if (update.status && update.status.status_code != 200) {
     res.status(500).end();
@@ -235,8 +246,10 @@ app.get("/api/updateUserDB/:id", async (req, res) => {
     res.status(500).end();
     return;
   }
-  const soloRanked = rankedData.find((ranked) => ranked.queueType === "RANKED_SOLO_5x5");
-  
+  const soloRanked = rankedData.find(
+    (ranked) => ranked.queueType === "RANKED_SOLO_5x5"
+  );
+
   if (soloRanked) Object.assign(update, soloRanked);
 
   const updatedUser = await Users.findOneAndUpdate({ _id: id }, update, {
@@ -247,11 +260,15 @@ app.get("/api/updateUserDB/:id", async (req, res) => {
 
 app.post("/api/matches", async (req, res) => {
   const puuid = req.body.puuid;
-  const matchList = await fetchRiotAPI('europe', `/lol/match/v5/matches/by-puuid/${puuid}/ids`, 'start=0&count=5');
+  const matchList = await fetchRiotAPI(
+    "europe",
+    `/lol/match/v5/matches/by-puuid/${puuid}/ids`,
+    "start=0&count=5"
+  );
 
   const matchData = await Promise.all(
     matchList.map((matchId) =>
-      fetchRiotAPI('europe', `/lol/match/v5/matches/${matchId}`)
+      fetchRiotAPI("europe", `/lol/match/v5/matches/${matchId}`)
     )
   );
 
@@ -291,5 +308,6 @@ app.get("/api/usersearch/:gameName", async (req, res) => {
   }
 });
 
+app.listen(PORT, () => console.log("http://localhost:3000"));
 
-app.listen(3000, () => console.log("http://localhost:3000"));
+export default app;
