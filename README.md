@@ -26,10 +26,12 @@ https://github.com/user-attachments/assets/8ee89974-62b4-402e-a4d9-32eef83d5b92
 ---
 
 ## Technologies
-- **Frontend**: React.js, CSS
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB
-- **Miscellaneous**: dotenv (for environment variables)
+- [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+- [![CSS3](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
+- [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+- [![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+- [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+- [![dotenv](https://img.shields.io/badge/dotenv-ECD53F?style=for-the-badge&logo=envato&logoColor=black)](https://www.npmjs.com/package/dotenv) 
 
 ---
 
@@ -37,8 +39,8 @@ https://github.com/user-attachments/assets/8ee89974-62b4-402e-a4d9-32eef83d5b92
 
 ### Prerequisites
 Make sure you have the following installed:
-- [Node.js](https://nodejs.org/)
-- [MongoDB](https://www.mongodb.com/)
+- [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+- [![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
 ### Steps
 1. **Clone the repository**:
